@@ -1,0 +1,52 @@
+$button-color-1: #F7C8E0;
+$button-color-2: #3C90CC;
+
+@mixin buttonEffect($color, $paddingInline, $colorText) {
+    padding-inline: $paddingInline;
+    &:hover{
+        background-color: $color!important;
+        color: $colorText!important;
+        border-color: $color!important;
+    }
+}
+
+.Tabs {
+    .ant-tabs-nav {
+        background-color: #FFFFFF!important;
+        padding-left: 150px;
+    }
+}
+
+.container {
+    width: 65%!important;
+    margin: 0 auto;
+}
+
+.AttendanceTemplate {
+    Button.check-in {
+        @include buttonEffect($button-color-2, 50px, #FFFFFF)
+    }
+    Button.check-out {
+        @include buttonEffect($button-color-1, 50px, #000000)
+    }
+    h2 {
+        font-size: 20px;
+        color: gray;
+        margin-top: 18px;
+        font-weight: 400;
+    }
+}
+
+.WheelTemplate {
+    Button.mssv-choose {
+        @include buttonEffect($button-color-2, 32px, #FFFFFF)
+    }
+    Button.cse {
+        @include buttonEffect($button-color-2, 75px, #FFFFFF);
+        padding-block: 10px;
+    }
+    Button.kms {
+        @include buttonEffect($button-color-1, 75px, #000000);
+        padding-block: 10px;
+    }
+}
