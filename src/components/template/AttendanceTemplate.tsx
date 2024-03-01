@@ -6,6 +6,16 @@ import { SearchOutlined } from "@ant-design/icons";
 export const AttendanceTemplate = () => {
   const [content, setContent] = useState('ĐIỂM DANH SINH VIÊN VÀO');
 
+  const search = async (event) => { 
+    try {
+      if(event.key === 'Enter'){
+        console.log(event.target.value);
+      }
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <div className="container AttendanceTemplate">
       <Row>
@@ -26,7 +36,7 @@ export const AttendanceTemplate = () => {
       </Row>
       <Row className="h-[70px] mt-4">
         <Col span={24} className="h-full bg-white flex items-center justify-center">
-          <Input className="w-2/3 py-[12px] text-[17px] font-medium" style={{
+          <Input className="w-2/3 py-[12px] text-[17px] font-medium" onKeyUp={(event) => { search(event) }} style={{
             borderRadius: "20px",
             border: "2px solid black",
           }} size="large" placeholder="Tìm kiếm sinh viên" prefix={<SearchOutlined className="pr-4 pl-2 font-semibold"/>} />

@@ -1,0 +1,26 @@
+#Database
+1.  schema student (id, mssv, name, surname, class, year, isCheckIn, isCheckOut, timeCheckIn, timeCheckOut, role)
+    mssv: String
+    name: String
+    surname: String
+    class: String
+    year: Number
+    isCheckIn: Boolean (default: false)
+    isCheckOut: Boolean (default: false)
+    timeCheckIn: Date (default: null)
+    timeCheckOut: Date (default: null)
+    role: Boolean (default: false) BTC - true
+
+#BackEnd
+url: http://localhost:8080/api/student
+1. Page Statitics 
+Endpoint: /getAttendanceList (GET): Get all students who have isCheckIn === true
+2. Page Attendance 
+Endpoint: /getAttendanceList (GET): Get all students who have isCheckIn === true
+Endpoint: /getAttendanceOutList (GET): Get all students who have isCheckOut === true
+Endpoint: /checkIn (PUT): 
+    Input: MSSV 
+    Output: Set student have corresponding MSSV, isCheckIn = true, timeCheckIn = new Date
+Endpoint: /checkOut (PUT):
+    Input: MSSV
+    Output: Set student have corresponding MSSV, isCheckOut = true, timeCheckIn = new Date
