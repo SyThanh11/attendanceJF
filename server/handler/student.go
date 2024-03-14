@@ -83,7 +83,7 @@ func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 
 // GetLuckyAttendeeList provide list of attendees to play spinner lottery
 //
-// Endpoint: /api/students/get-lucky-attendee-list [GET]
+// Endpoint: /api/students/get-lucky-list [GET]
 //
 // Response:
 //   - 200: [{"student-id", "surname", "name", "class", "year"}]
