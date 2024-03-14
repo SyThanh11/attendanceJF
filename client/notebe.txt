@@ -3,7 +3,7 @@
     mssv: String
     name: String
     surname: String
-    class: String
+    class: String   
     year: Number
     isCheckIn: Boolean (default: false)
     isCheckOut: Boolean (default: false)

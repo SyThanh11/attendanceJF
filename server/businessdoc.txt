@@ -1,0 +1,10 @@
+# Attendance
+Dont need to implement 2 button checkin and checkout, just give input at StudentID, the first time is checkin, and latter is checkout
+If the time attend to event below 1.5 hours, warning: You're already checkin or wanna checkout? Enjoy more to checkout.
+
+# Student Data
+Based on current situation, there are few students had regist on Doan-Hoi website, maybe, someone didnt regist but wanna enjoy the event.
+=> Need to implement the realtime system for student to get data from student who regist at the reception.
+Business description: Student fill information to form/web/... -> Server get data from that and save to db -> student now can checkin.
+
+# In
