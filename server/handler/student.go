@@ -10,7 +10,7 @@ import (
 
 // GetAttendanceList send list of attendance (checkin).
 //
-// Endpoint: /api/get-attendance-list [GET]
+// Endpoint: /api/students/get-attendance-list [GET]
 //
 // Response:
 //   - 200: [{"student-id", "surname", "name", "class", "year"}]
@@ -27,7 +27,7 @@ func (h *AttendanceJFHandler) GetAttendanceList(c *gin.Context) {
 
 // GetCheckoutList send list of checkout attendee.
 //
-// Endpoint: /api/get-attendance-list [GET]
+// Endpoint: /api/students/get-attendance-list [GET]
 //
 // Response:
 //   - 200: [{"student-id", "surname", "name", "class", "year"}]
@@ -44,15 +44,15 @@ func (h *AttendanceJFHandler) GetCheckOutList(c *gin.Context) {
 
 // HandleCheckInOut is used to handle for student checkin or checkout
 //
-// Endpoint: /api/checkin-out/{id} [PUT]
+// Endpoint: /api/students/checkin-out/{id} [PUT]
 //
 // This api retrieves the value of "id" parameter from URL path
 //
 // Response:
-//	- 200: "checkin" or "checkout"
-//	- 400 "binding failure": no id parameter found in URL
-//	- 400 "invalid data": id provided is wrong syntax
-// 	- 500: server error
+//   - 200: "checkin" or "checkout"
+//   - 400 "binding failure": no id parameter found in URL
+//   - 400 "invalid data": id provided is wrong syntax
+//   - 500: server error
 func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 	idStr := c.Param("id")
 	if idStr == "" {
@@ -83,11 +83,11 @@ func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 
 // GetLuckyAttendeeList provide list of attendees to play spinner lottery
 //
-// Endpoint: /api/get-lucky-attendee-list [GET]
+// Endpoint: /api/students/get-lucky-attendee-list [GET]
 //
-// Response: 
-//	- 200: [{"student-id", "surname", "name", "class", "year"}]
-//	- 500: server error
+// Response:
+//   - 200: [{"student-id", "surname", "name", "class", "year"}]
+//   - 500: server error
 func (h *AttendanceJFHandler) GetLuckyAttendeeList(c *gin.Context) {
 	luckyAttendanceList, err := h.StudentUsecase.GetLuckyAttendeeList()
 	if err != nil {
