@@ -24,13 +24,12 @@ type Student struct {
 	ID           int `gorm:"primaryKey"`
 	Name         string
 	Surname      string
-	Class        string
+	School       string
 	Year         SchoolYear
 	IsCheckin    bool
 	IsCheckout   bool
 	TimeCheckin  time.Time
 	TimeCheckout time.Time
-	Role         Role
 	// this field is for lottery
 	IsComittee      bool
 	IsLuckyAttendee bool // if student already have been choose by system to play lottery, this field turn to true then cannot choose again
