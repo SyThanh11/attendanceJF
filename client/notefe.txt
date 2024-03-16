@@ -1,0 +1,5 @@
+Gồm 3 page chính: Statitic, Attendance, Wheel
+Mỗi page gồm template riêng
+Muốn sửa giao diện vào src/component/template/ rồi chỉnh sửa template muốn điều chỉnh
+Chủ yếu giao diện ở phần components nên chỉnh sửa ở đó
+

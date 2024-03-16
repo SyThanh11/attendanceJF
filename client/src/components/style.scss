@@ -18,35 +18,37 @@ $button-color-2: #3C90CC;
 }
 
 .container {
-    width: 65%!important;
+    width: 80%!important;
     margin: 0 auto;
 }
 
+.StatisticTemplate {
+    th {
+        background: #FF6C22!important;
+        opacity: 70%!important;
+        color: #000000!important;
+        font-weight: bold !important;
+        text-align: center!important;
+        font-size: 1rem!important;
+        border: 1px solid #FF6C22!important;
+    }
+    table {
+        width: 30rem;
+        td {
+           text-align: center; 
+        }
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+}
+
 .AttendanceTemplate {
-    Button.check-in {
-        @include buttonEffect($button-color-2, 50px, #FFFFFF)
-    }
-    Button.check-out {
-        @include buttonEffect($button-color-1, 50px, #000000)
-    }
-    h2 {
-        font-size: 20px;
-        color: gray;
-        margin-top: 18px;
-        font-weight: 400;
+    p {
+        padding-block: 6px;
+        font-weight: 500;
+        padding-left: 12px
     }
 }
 
 .WheelTemplate {
-    Button.mssv-choose {
-        @include buttonEffect($button-color-2, 32px, #FFFFFF)
-    }
-    Button.cse {
-        @include buttonEffect($button-color-2, 75px, #FFFFFF);
-        padding-block: 10px;
-    }
-    Button.kms {
-        @include buttonEffect($button-color-1, 75px, #000000);
-        padding-block: 10px;
-    }
+    
 }

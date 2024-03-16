@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-#root {
-    background-color: #ECF2FF;
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
+
+.potta-one-regular {
+    font-family: "Potta One", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  

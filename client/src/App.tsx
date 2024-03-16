@@ -4,7 +4,7 @@ import { route } from "routes"
 function App() {
 
   return (
-    <div>
+    <div className="h-[100vh]">
       {
         useRoutes(route)
       }

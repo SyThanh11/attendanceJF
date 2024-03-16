@@ -1,11 +1,19 @@
-import { Footer, Header, Navbar } from "components"
+import { Footer, Header } from "components"
+import { Outlet, useLocation } from "react-router-dom"
 
 export const MainLayout = () => {
+  const location = useLocation();
+  const isHeaderFooter = location.pathname != "/attendance";
+
   return (
     <div>
-      <Header />
-      <Navbar />
-      <Footer />
+      {
+        isHeaderFooter && <Header />
+      }
+      <Outlet />
+      {
+        isHeaderFooter && <Footer />
+      }
     </div>
     
   )

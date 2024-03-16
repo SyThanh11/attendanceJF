@@ -1,9 +1,31 @@
-import { Col, Row } from "antd";
-import '../style.scss';
+import { Col, Row, Table, TableProps } from "antd";
+import { Student } from "constant/type";
 import { useEffect, useState } from "react";
+import '../style.scss';
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  const columns: TableProps<Student>['columns'] = [
+    {
+      title: 'Họ và tên',
+      dataIndex: 'fullName',
+      key: 'fullName',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Mã số sinh viên',
+      dataIndex: 'studentCode',
+      key: 'studentCode',
+    },
+  ]
+
+  const studentList: Student[] = [] // Lấy student từ UseSelector - UseSelector xử lý lấy dữ liệu từ BE
+  
+  // Duy trì 5 sinh viên điểm danh mới nhất show lên màn hìnhn
+  const checkStudentList = (studentList: Student[]): Student[] => { 
+    return studentList.length <= 5 ? studentList : studentList.slice(1,6)
+  };
 
   useEffect(() => { 
     const setDate = setInterval(() => { 
@@ -13,37 +35,29 @@ export const StatisticTemplate = () => {
   }, [])
 
   return (
-    <div className="container">
-      <Row>
-        <Col span={24} className="font-bold text-[24px] bg-white py-4 pl-10">
-          THỐNG KÊ SỰ KIỆN JOB FAIR 2024
-        </Col>
-      </Row>
-      <Row className="h-[500px] mt-4">
-        <Col span={11} className="h-full bg-white font-bold text-[24px] text-center pt-2">
-          SINH VIÊN VỪA ĐIỂM DANH
-        </Col>
-        <Col span={12} offset={1} className="font-bold text-[24px] text-center">
-          <div className="h-1/2">
-            <h1 className="h-[50px] bg-white flex items-center justify-center">THỜI GIAN HIỆN TẠI</h1>
-            <p className="h-[200px] flex items-center justify-center text-[#336699] text-[60px]">{currentTime.getHours()}:{currentTime.getMinutes()}:{currentTime.getSeconds()}</p>
+    <div className="container StatisticTemplate h-[60vh] overflow-hidden">
+      <Row className="style={{ height: '300px' }}">
+        <Col span={8} className="flex flex-col justify-center items-center">
+          <h2 className="text-[#FF6C22] italic font-bold text-[1.5rem]">Sinh viên tham gia</h2>
+          <div className="item mt-2" style={{
+            backgroundColor: '#FF6C22',
+            width: '350px',
+            height: '350px',
+            borderRadius: '50%',
+            textAlign: 'center',
+            lineHeight: '350px',
+          }}>
+            <h2 className="font-bold text-white text-[10rem]">999</h2>
           </div>
-          <div className="h-1/2 bg-white">
-            <h1 className="flex items-center justify-center pt-2">THỐNG KÊ</h1>
-            <Row className="flex items-center h-3/4">
-              <Col className="flex flex-col items-center justify-center" span={12}>
-                <p className="w-[150px] h-[150px] bg-[#ECF2FF] flex items-center justify-center text-[#336699] text-[60px]" style={{
-                  borderRadius: "50%"
-                }}>0</p>
-                <p className="mt-2 text-[20px] font-medium">Sinh viên tham gia</p>
-              </Col>
-              <Col className="flex flex-col items-center justify-center" span={12}>
-              <p className="w-[150px] h-[150px] bg-[#ECF2FF] flex items-center justify-center text-[#336699] text-[60px]" style={{
-                  borderRadius: "50%"
-                }}>50</p>
-                <p className="mt-2 text-[20px] font-medium">Doanh nghiệp tham gia</p>
-              </Col>
-            </Row>
+        </Col>
+        <Col span={16} className="flex flex-col justify-center items-center">
+          <div className="top text-center font-bold text-[4rem]">
+            {
+              (currentTime.getHours() >= 10 ? currentTime.getHours() : '0' + currentTime.getHours()) + ':' + (currentTime.getMinutes() >= 10 ? currentTime.getMinutes() : '0' + currentTime.getMinutes()) + ':' + (currentTime.getSeconds() >= 10 ? currentTime.getSeconds() : '0' + currentTime.getSeconds())
+            }
+          </div>
+          <div className="bottom table" style={{ height: '300px' }}>
+            <Table columns={columns} dataSource={checkStudentList(studentList).reverse()} pagination={false} ></Table>
           </div>
         </Col>
       </Row>
