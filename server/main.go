@@ -5,6 +5,7 @@ import (
 	"attendanceJF/repository"
 	"attendanceJF/settings"
 	"attendanceJF/usecase"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -15,7 +16,7 @@ func main() {
 
 	err := godotenv.Load()
 	if err != nil {
-		panic("fail to load .env file")
+		fmt.Print("fail to load .env file")
 	}
 
 	settings.InitDB()

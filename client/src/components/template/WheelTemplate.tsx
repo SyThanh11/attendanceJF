@@ -1,11 +1,4 @@
-<<<<<<< Updated upstream
 import { Button, Col, Row } from "antd"
-=======
-import { Button, Col, Row } from "antd";
-import { useState } from "react";
-import cls from "classnames";
-// import { Spin } from "components";
->>>>>>> Stashed changes
 
 export const WheelTemplate = () => {
   const studentPrize = new Array(10).fill('2110540');
@@ -38,7 +31,6 @@ export const WheelTemplate = () => {
             }} className='w-[18%] py-[20px] bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center'>Random</Button>
           </div>
         </Col>
-<<<<<<< Updated upstream
         <Col span={8} className="flex justify-center items-center">
           <div style={{
             backgroundColor: '#FF6C22',
@@ -104,13 +96,6 @@ export const WheelTemplate = () => {
               transform: 'rotateY(180deg)'
             }} />
           </div>
-=======
-        <Col offset={1} span={13} className="bg-white h-[560px] py-2">
-          <h1 className="font-bold text-[24px] pl-2">VÒNG QUAY MAY MẮN</h1>   
-          {/* <div className="flex items-center w-full justify-center">
-            <Spin data={[]} />
-          </div> */}
->>>>>>> Stashed changes
         </Col>
       </Row>
     </div>

@@ -12,7 +12,7 @@ COPY package*.json ./
 RUN apk add --no-cache bash
 RUN apk add --no-cache curl
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.5
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 # Build ứng dụng ReactJS
 RUN npm run build
