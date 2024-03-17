@@ -50,5 +50,13 @@ func migrateDB() {
 
 // initData will initial data if there is not record in db
 func initData() {
+<<<<<<< Updated upstream
+=======
+	dataPathFile := os.Getenv("STUDENT_DATA_PATH")
+	studentsDataFile, err := xlsx.OpenFile(dataPathFile)
+	if err != nil {
+		panic(err)
+	}
+>>>>>>> Stashed changes
 
 }

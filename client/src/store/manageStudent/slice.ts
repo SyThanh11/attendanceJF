@@ -8,7 +8,7 @@ export const manageStudentSlice = createSlice({
     reducers: {
         
     },
-    extraReducers: (builder) => {}
+    extraReducers: () => {}
 })
 
 export const { reducer: manageStudentReducer, actions: manageStudentAction } = manageStudentSlice
