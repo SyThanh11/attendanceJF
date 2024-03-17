@@ -1,30 +1,29 @@
-# Sử dụng image node với tag là một phiên bản cụ thể
-FROM node:20-alpine as build
+# Stage 1: Build React app
+FROM node:20-alpine AS build
 
-# Thiết lập thư mục làm việc trong container
 WORKDIR /app
 
-# Copy toàn bộ mã nguồn vào thư mục /app trong container
-COPY . .
+COPY package.json .
+COPY yarn.lock .
 
-# Copy file package.json và package-lock.json nếu có, sau đó chạy yarn install để cài đặt dependencies
-COPY package*.json ./
-RUN apk add --no-cache bash
-RUN apk add --no-cache curl
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.5
 RUN yarn install
 
-# Build ứng dụng ReactJS
-RUN npm run build
+COPY . .
 
-# Sử dụng image nginx để chạy ứng dụng đã build
+# Copy nginx-config into the build directory
+COPY nginx-config /app/nginx-config
+
+RUN yarn build
+
+# Stage 2: Serve app with nginx
 FROM nginx:alpine
 
-# Copy các file cần thiết từ build stage vào thư mục của nginx
+# Copy nginx-config into nginx
+COPY --from=build /app/nginx-config/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy build directory from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# EXPOSE cổng 80 cho ứng dụng web
 EXPOSE 80
 
-# CMD để khởi động nginx khi container được chạy
 CMD ["nginx", "-g", "daemon off;"]
