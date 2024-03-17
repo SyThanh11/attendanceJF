@@ -4,20 +4,11 @@ import (
 	"attendanceJF/model"
 	"fmt"
 	"os"
+	"strconv"
 
+	"github.com/tealeg/xlsx"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-)
-
-// database config const
-var (
-	hostname       = os.Getenv("DB_HOSTNAME")
-	username       = os.Getenv("DB_USERNAME")
-	port           = os.Getenv("DB_PORT")
-	dbName         = os.Getenv("DB_NAME")
-	dbPassword     = os.Getenv("DB_PASSWORD")
-	SSLMode        = "prefer"
-	ConnectTimeout = "10"
 )
 
 var db *gorm.DB
@@ -27,6 +18,16 @@ func GetDB() *gorm.DB {
 }
 
 func InitDB() {
+	// database config const
+	var (
+		hostname       = os.Getenv("DB_HOSTNAME")
+		username       = os.Getenv("DB_USERNAME")
+		port           = os.Getenv("DB_PORT")
+		dbName         = os.Getenv("DB_NAME")
+		dbPassword     = os.Getenv("DB_PASSWORD")
+		SSLMode        = "prefer"
+		ConnectTimeout = "10"
+	)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s connect_timeout=%s",
 		hostname, username, dbPassword, dbName, port, SSLMode, ConnectTimeout)
 
@@ -50,13 +51,38 @@ func migrateDB() {
 
 // initData will initial data if there is not record in db
 func initData() {
-<<<<<<< Updated upstream
-=======
 	dataPathFile := os.Getenv("STUDENT_DATA_PATH")
 	studentsDataFile, err := xlsx.OpenFile(dataPathFile)
 	if err != nil {
 		panic(err)
 	}
->>>>>>> Stashed changes
 
+	sheet := studentsDataFile.Sheets[0]
+
+	for _, row := range sheet.Rows[1:] {
+
+		studentIDString := row.Cells[0].String()
+		fmt.Print(studentIDString)
+		studentID, err := strconv.Atoi(studentIDString)
+		if err != nil {
+			fmt.Println("Error converting student ID:", err) // Add logging
+			panic(err)
+		}
+
+		student := model.Student{
+			ID:              studentID,
+			Surname:         row.Cells[1].String(),
+			Name:            row.Cells[2].String(),
+			School:          row.Cells[3].String(),
+			Year:            model.SchoolYear(row.Cells[4].String()),
+			IsComittee:      row.Cells[5].String() == "Ban tổ chức",
+			IsCheckin:       false,
+			IsCheckout:      false,
+			IsLuckyAttendee: false,
+		}
+
+		if err = db.Save(&student).Error; err != nil {
+			continue
+		}
+	}
 }
