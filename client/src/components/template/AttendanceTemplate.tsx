@@ -1,19 +1,34 @@
 import { Button, Col, Input, Row } from 'antd';
 import '../style.scss';
 import { SearchOutlined } from '@ant-design/icons';
-
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export const AttendanceTemplate = () => {
 
-  const data = [
-    { key: '1', fullName: 'Student 1', MSSV: '2110002' },
-    { key: '2', fullName: 'Student 2', MSSV: '2110002' },
-    { key: '3', fullName: 'Student 3', MSSV: '2110003' },
-    { key: '4', fullName: 'Student 4', MSSV: '2110004' },
-    { key: '5', fullName: 'Student 5', MSSV: '2110005' },
-    { key: '6', fullName: 'Student 6', MSSV: '2110006' },
-    { key: '7', fullName: 'Student 6', MSSV: '2110007' }
-  ]
+  // const data = [
+  //   { key: '1', fullName: 'Student 1', MSSV: '2110002' },
+  //   { key: '2', fullName: 'Student 2', MSSV: '2110002' },
+  //   { key: '3', fullName: 'Student 3', MSSV: '2110003' },
+  //   { key: '4', fullName: 'Student 4', MSSV: '2110004' },
+  //   { key: '5', fullName: 'Student 5', MSSV: '2110005' },
+  //   { key: '6', fullName: 'Student 6', MSSV: '2110006' },
+  //   { key: '7', fullName: 'Student 6', MSSV: '2110007' }
+  // ]
+  
+  const [attendanceList, setAttendanceList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get("api/students/get-attendance-list");
+      if (response.status === 200) {
+        setAttendanceList(response.data.data);
+      } else {
+        console.error("fail to fetch data");
+      }
+
+    }
+    fetchData();
+  }, [])
 
   return (
     <div className="AttendanceTemplate h-[100vh] bg-[#F6F3F1]">
@@ -83,11 +98,11 @@ export const AttendanceTemplate = () => {
           </div>
           <div className='content mt-4'>
             {
-              data.map((student) => (
+              attendanceList.map((student) => (
                 <div key={student.key} className='item flex items-center justify-between h-[75px] bg-white border-b-[3px]'>
                   <div className='left flex flex-col ml-10'>
-                    <h2 className='text-left text-[20px]'>{student.fullName}</h2>
-                    <h3 className='text-left text-[16px] text-gray-500'>{student.MSSV}</h3>
+                    <h2 className='text-left text-[20px]'>{student.name}</h2>
+                    <h3 className='text-left text-[16px] text-gray-500'>{student.student_id}</h3>
                   </div>
                   <div className='right flex items-center'>
                     <Button style={{

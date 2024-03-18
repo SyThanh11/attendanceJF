@@ -21,6 +21,7 @@ services:
 
 
   golang-app:
+    container_name: golang-app
     build:
       context: ./server
       dockerfile: Dockerfile
