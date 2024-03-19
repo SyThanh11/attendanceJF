@@ -13,7 +13,7 @@ import (
 // Endpoint: /api/get-attendance-list [GET]
 //
 // Response:
-//   - 200: [{"student-id", "surname", "name", "class", "year"}]
+//   - 200: [{"student-id", "surname", "name", "school", "year"}]
 //   - 500: general failure
 func (h *AttendanceJFHandler) GetAttendanceList(c *gin.Context) {
 	attendanceList, err := h.StudentUsecase.GetAttendanceList()

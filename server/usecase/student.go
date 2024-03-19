@@ -27,11 +27,11 @@ func NewStudentUsecase(
 }
 
 type StudentInfo struct {
-	StudentID int
-	Name      string
-	Surname   string
-	Class     string
-	Year      model.SchoolYear
+	StudentID int              `json:"student_id"`
+	Name      string           `json:"name"`
+	Surname   string           `json:"surname"`
+	School    string           `json:"school"`
+	Year      model.SchoolYear `json:"year"`
 }
 
 func (u *studentUsecaseImpl) GetAttendanceList() ([]*StudentInfo, error) {
@@ -47,7 +47,7 @@ func (u *studentUsecaseImpl) GetAttendanceList() ([]*StudentInfo, error) {
 				StudentID: student.ID,
 				Name:      student.Name,
 				Surname:   student.Surname,
-				Class:     student.Class,
+				School:    student.School,
 				Year:      student.Year,
 			})
 		}
@@ -69,7 +69,7 @@ func (u *studentUsecaseImpl) GetCheckOutList() ([]*StudentInfo, error) {
 				StudentID: student.ID,
 				Name:      student.Name,
 				Surname:   student.Surname,
-				Class:     student.Class,
+				School:    student.School,
 				Year:      student.Year,
 			})
 		}
@@ -146,7 +146,7 @@ func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
 				StudentID: luckyAttendee.ID,
 				Surname:   luckyAttendee.Surname,
 				Name:      luckyAttendee.Name,
-				Class:     luckyAttendee.Class,
+				School:    luckyAttendee.School,
 				Year:      luckyAttendee.Year,
 			})
 		} else {

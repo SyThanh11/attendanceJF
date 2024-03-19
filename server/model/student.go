@@ -24,7 +24,7 @@ type Student struct {
 	ID           int `gorm:"primaryKey"`
 	Name         string
 	Surname      string
-	Class        string
+	School        string
 	Year         SchoolYear
 	IsCheckin    bool
 	IsCheckout   bool
