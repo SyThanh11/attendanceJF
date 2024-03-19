@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:80"
+    command: ["nginx", "-g", "daemon off;"]
 
   db:
     image: postgres:16
@@ -38,6 +39,7 @@ services:
       - STUDENT_DATA_PATH=/app/students_data.xlsx
     depends_on:
       - db # Đảm bảo rằng dịch vụ PostgreSQL được khởi động trước khi ứng dụng Golang bắt đầu chạy
+    command: ["/main"]
     # env_file:
     #   - server/.env
       
