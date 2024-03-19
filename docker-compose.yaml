@@ -9,16 +9,16 @@ services:
       - "3000:80"
     command: ["nginx", "-g", "daemon off;"]
 
-  # db:
-  #   image: postgres:16
-  #   # volumes:
-  #   #   - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: 123456
-  #     POSTGRES_DB: attendanceJF
-  #   ports:
-  #     - "5432:5432"
+  db:
+    image: postgres:16
+    # volumes:
+    #   - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: attendanceJF
+    ports:
+      - "5432:5432"
 
 
   golang-app:
@@ -31,11 +31,11 @@ services:
     volumes:
       - ./server/settings/students_data.xlsx:/app/students_data.xlsx
     environment:
-      - DB_HOSTNAME=db
+      - DB_HOSTNAME=localhost
       - DB_USERNAME=postgres
       - DB_PORT=5432
       - DB_NAME=attendancejf
-      - DB_PASSWORD=123456
+      - DB_PASSWORD=cse@123
       - STUDENT_DATA_PATH=/app/students_data.xlsx
     # depends_on:
     #   - db # Đảm bảo rằng dịch vụ PostgreSQL được khởi động trước khi ứng dụng Golang bắt đầu chạy
