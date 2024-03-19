@@ -18,8 +18,3 @@ COPY --from=build /app/main /
 
 # CMD để chạy binary khi container được chạy
 CMD ["/main"]
-
-# # Cài đặt wait-for-it sử dụng apk
-# RUN apk add --no-cache bash
-# COPY wait-for-it.sh /usr/local/bin/wait-for-it
-# RUN chmod +x /usr/local/bin/wait-for-it
