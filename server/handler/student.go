@@ -3,7 +3,6 @@ package handler
 import (
 	"attendanceJF/pkg"
 	"attendanceJF/usecase"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,6 +41,10 @@ func (h *AttendanceJFHandler) GetCheckOutList(c *gin.Context) {
 	responseSuccess(c, checkoutList)
 }
 
+type StudentIDReq struct {
+	ID int `json:"id"`
+}
+
 // HandleCheckInOut is used to handle for student checkin or checkout
 //
 // Endpoint: /api/checkin-out/{id} [PUT]
@@ -49,24 +52,25 @@ func (h *AttendanceJFHandler) GetCheckOutList(c *gin.Context) {
 // This api retrieves the value of "id" parameter from URL path
 //
 // Response:
-//	- 200: "checkin" or "checkout"
-//	- 400 "binding failure": no id parameter found in URL
-//	- 400 "invalid data": id provided is wrong syntax
-// 	- 500: server error
+//   - 200: "checkin" or "checkout"
+//   - 400 "binding failure": no id parameter found in URL
+//   - 400 "invalid data": id provided is wrong syntax
+//   - 500: server error
 func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
-	idStr := c.Param("id")
-	if idStr == "" {
-		responseBadRequestError(c, pkg.BindingFailure)
-		return
-	}
-
-	id, err := strconv.Atoi(idStr)
+	var req StudentIDReq
+	
+	err := c.ShouldBind(&req)
 	if err != nil {
 		responseBadRequestError(c, pkg.InvalidData)
-		return
 	}
 
-	status, err := h.StudentUsecase.HandleCheckInOut(int(id))
+	// id, err := strconv.Atoi(req.ID)
+	// if err != nil {
+	// 	responseBadRequestError(c, pkg.InvalidData)
+	// 	return
+	// }
+
+	status, err := h.StudentUsecase.HandleCheckInOut(req.ID)
 	if err != nil {
 		responseServerError(c, pkg.ParseError(err))
 		return
@@ -85,9 +89,9 @@ func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 //
 // Endpoint: /api/get-lucky-attendee-list [GET]
 //
-// Response: 
-//	- 200: [{"student-id", "surname", "name", "class", "year"}]
-//	- 500: server error
+// Response:
+//   - 200: [{"student-id", "surname", "name", "class", "year"}]
+//   - 500: server error
 func (h *AttendanceJFHandler) GetLuckyAttendeeList(c *gin.Context) {
 	luckyAttendanceList, err := h.StudentUsecase.GetLuckyAttendeeList()
 	if err != nil {
