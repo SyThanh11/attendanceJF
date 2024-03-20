@@ -8,6 +8,8 @@ services:
     ports:
       - "3000:80"
     command: ["nginx", "-g", "daemon off;"]
+    depends_on:
+      - golang-app
 
   db:
     image: postgres:16-alpine
