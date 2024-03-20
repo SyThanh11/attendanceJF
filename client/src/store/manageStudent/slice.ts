@@ -21,7 +21,7 @@ export const manageStudentSlice = createSlice({
     extraReducers: (build) => {
         build.addCase(getStudentListThunk.fulfilled, (state, {payload}) => {
             state.studentList = payload.data;
-        }).addCase(attendanceStudentThunk.fulfilled, (_, {payload}) => {
+        }).addCase(attendanceStudentThunk.fulfilled, (_, {}) => {
             
         })
     }

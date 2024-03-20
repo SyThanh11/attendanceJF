@@ -1,7 +1,7 @@
 import { Button, Col, Input, Row } from 'antd';
 import '../style.scss';
 import { SearchOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Student } from 'constant';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from 'store';

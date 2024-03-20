@@ -8,7 +8,7 @@ import { attendanceStudentThunk, getStudentListThunk } from "store/manageStudent
 import useScanDetection from "use-scan-detection";
 
 export const StatisticTemplate = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const currentTime = new Date();
   const [barcodeScan, setBarcodeScan] = useState(null);
   const dispatch = useAppDispatch();
 
