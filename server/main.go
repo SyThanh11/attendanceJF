@@ -5,6 +5,7 @@ import (
 	"attendanceJF/repository"
 	"attendanceJF/settings"
 	"attendanceJF/usecase"
+	"github.com/gin-contrib/cors"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -29,6 +30,13 @@ func main() {
 	attendanceJFHandler := handler.NewAttendanceJFHandler(studentUsecase)
 
 	router := gin.Default()
+
+	// Configure CORS middleware
+    router.Use(cors.New(cors.Config{
+        AllowOrigins: []string{"http://localhost:3000"}, // Allow requests from localhost:3000
+        AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+        AllowHeaders: []string{"Origin", "Content-Type"},
+    }))
 
 	api := router.Group("/api")
 	{

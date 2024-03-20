@@ -93,7 +93,7 @@ export const WheelTemplate = () => {
               top: '-38px',
               left: '-18px',
               width: '32%',
-              transform: 'rotateY(180deg)'
+              transform: 'rotateY("180deg")'
             }} />
           </div>
         </Col>

@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Student } from "constant";
+import { attendanceStudentThunk, getStudentListThunk } from "./thunk";
 
-const initialState = {}
+type manageStudentState = {
+    studentList: Student[],
+}
+
+const initialState: manageStudentState = {
+    studentList: []
+}
 
 export const manageStudentSlice = createSlice({
     name: "manageStudent",
@@ -8,7 +16,14 @@ export const manageStudentSlice = createSlice({
     reducers: {
         
     },
-    extraReducers: () => {}
+    extraReducers: (build) => {
+        build.addCase(getStudentListThunk.fulfilled, (state, {payload}) => {
+            state.studentList = payload.data;
+        }).addCase(attendanceStudentThunk.fulfilled, (_, {payload}) => {
+            console.log(payload);
+            
+        })
+    }
 })
 
 export const { reducer: manageStudentReducer, actions: manageStudentAction } = manageStudentSlice

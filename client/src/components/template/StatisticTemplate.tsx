@@ -1,38 +1,61 @@
-import { Col, Row, Table, TableProps } from "antd";
+import { Col, Row, Table } from "antd";
 import { Student } from "constant/type";
 import { useEffect, useState } from "react";
 import '../style.scss';
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "store";
+import { getStudentListThunk } from "store/manageStudent/thunk";
+import useScanDetection from "use-scan-detection";
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [reversedStudentList, setReversedStudentList] = useState<Student[]>([]);
+  const [barcodeScan, setBarcodeScan] = useState("No Barcode Scanned");
+  const dispatch = useAppDispatch();
 
-  const columns: TableProps<Student>['columns'] = [
+  useScanDetection({
+    onComplete: (code: string) => setBarcodeScan(code),
+    minLength: 3
+  })
+
+  const columns = [
     {
       title: 'Họ và tên',
-      dataIndex: 'fullName',
-      key: 'fullName',
-      render: (text) => <a>{text}</a>,
+      dataIndex: 'name',
+      key: 'name',
+      render: (text: string) => <a>{text}</a>,
     },
     {
       title: 'Mã số sinh viên',
-      dataIndex: 'studentCode',
-      key: 'studentCode',
+      dataIndex: 'student_id',
+      key: 'student_id',
     },
   ]
 
-  const studentList: Student[] = [] // Lấy student từ UseSelector - UseSelector xử lý lấy dữ liệu từ BE
-  
-  // Duy trì 5 sinh viên điểm danh mới nhất show lên màn hìnhn
+  const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList) // Lấy student từ UseSelector - UseSelector xử lý lấy dữ liệu từ BE
+
+  // Duy trì 5 sinh viên điểm danh mới nhất show lên màn hình
   const checkStudentList = (studentList: Student[]): Student[] => { 
     return studentList.length <= 5 ? studentList : studentList.slice(1,6)
   };
 
   useEffect(() => { 
-    const setDate = setInterval(() => { 
+    const timerId = setTimeout(() => { 
       setCurrentTime(new Date());
-    }, 1000)
-    return () => clearInterval(setDate);
-  }, [])
+    }, 1000);
+    return () => clearTimeout(timerId);
+  }, [currentTime])
+
+  useEffect(() => {
+    dispatch(getStudentListThunk())
+  }, [dispatch])
+
+  useEffect(() => {
+    setReversedStudentList([...checkStudentList(studentList)].reverse());
+  }, [studentList]);
+
+  const barcodeNumber = parseInt(barcodeScan);
+  const barcodeDisplay = isNaN(barcodeNumber) ? "Invalid Barcode" : barcodeNumber;
 
   return (
     <div className="container StatisticTemplate h-[60vh] overflow-hidden">
@@ -57,12 +80,17 @@ export const StatisticTemplate = () => {
             }
           </div>
           <div className="bottom table" style={{ height: '300px' }}>
-            <Table columns={columns} dataSource={checkStudentList(studentList).reverse()} pagination={false} ></Table>
+            <Table columns={columns} dataSource={reversedStudentList} pagination={false} ></Table>
           </div>
         </Col>
       </Row>
+      <p>
+        Barcode: {barcodeDisplay}
+      </p>
     </div>
   )
 }
+
+
 
 export default StatisticTemplate
