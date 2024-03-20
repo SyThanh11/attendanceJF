@@ -35,7 +35,7 @@ func main() {
 		students := api.Group("/students")
 		students.GET("/get-attendance-list", attendanceJFHandler.GetAttendanceList)
 		students.GET("/get-checkout-list", attendanceJFHandler.GetCheckOutList)
-		students.PUT("/checkin-out/:id", attendanceJFHandler.HandleCheckInOut)
+		students.PUT("/checkin-out", attendanceJFHandler.HandleCheckInOut)
 		students.GET("/get-lucky-list", attendanceJFHandler.GetLuckyAttendeeList)
 	}
 

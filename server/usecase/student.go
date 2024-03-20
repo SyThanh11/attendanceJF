@@ -3,7 +3,6 @@ package usecase
 import (
 	"attendanceJF/model"
 	"attendanceJF/repository"
-	"errors"
 	"time"
 )
 
@@ -106,10 +105,10 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (Status, error) {
 
 		status = CheckIn
 	} else if !student.IsCheckout {
-		duration := currentTime.Sub(student.TimeCheckin)
-		if duration < time.Hour {
-			return "", errors.New("attendance not enough time")
-		}
+		// duration := currentTime.Sub(student.TimeCheckin)
+		// if duration < time.Hour {
+		// 	return "", errors.New("attendance not enough time")
+		// }
 
 		student.IsCheckout = true
 		student.TimeCheckout = currentTime
