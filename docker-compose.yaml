@@ -10,7 +10,7 @@ services:
     command: ["nginx", "-g", "daemon off;"]
 
   db:
-    image: postgres:16
+    image: postgres:16-alpine
     # volumes:
     #   - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
