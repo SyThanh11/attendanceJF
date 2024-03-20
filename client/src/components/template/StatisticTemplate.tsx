@@ -4,13 +4,12 @@ import { useEffect, useState } from "react";
 import '../style.scss';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "store";
-import { getStudentListThunk } from "store/manageStudent/thunk";
+import { attendanceStudentThunk, getStudentListThunk } from "store/manageStudent/thunk";
 import useScanDetection from "use-scan-detection";
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [reversedStudentList, setReversedStudentList] = useState<Student[]>([]);
-  const [barcodeScan, setBarcodeScan] = useState("No Barcode Scanned");
+  const [barcodeScan, setBarcodeScan] = useState(null);
   const dispatch = useAppDispatch();
 
   useScanDetection({
@@ -32,30 +31,28 @@ export const StatisticTemplate = () => {
     },
   ]
 
-  const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList) // Lấy student từ UseSelector - UseSelector xử lý lấy dữ liệu từ BE
+  const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList) 
 
-  // Duy trì 5 sinh viên điểm danh mới nhất show lên màn hình
-  const checkStudentList = (studentList: Student[]): Student[] => { 
-    return studentList.length <= 5 ? studentList : studentList.slice(1,6)
-  };
-
-  useEffect(() => { 
-    const timerId = setTimeout(() => { 
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearTimeout(timerId);
-  }, [currentTime])
+  // useEffect(() => { 
+  //   const timerId = setTimeout(() => { 
+  //     setCurrentTime(new Date());
+  //   }, 1000);
+  //   return () => clearTimeout(timerId);
+  // }, [currentTime])
 
   useEffect(() => {
     dispatch(getStudentListThunk())
   }, [dispatch])
 
   useEffect(() => {
-    setReversedStudentList([...checkStudentList(studentList)].reverse());
-  }, [studentList]);
-
-  const barcodeNumber = parseInt(barcodeScan);
-  const barcodeDisplay = isNaN(barcodeNumber) ? "Invalid Barcode" : barcodeNumber;
+    if (barcodeScan !== null) { 
+      dispatch(attendanceStudentThunk({
+        id: Number(barcodeScan)
+      })).then(() => {
+        dispatch(getStudentListThunk());
+      });
+    }
+  }, [barcodeScan, dispatch]);
 
   return (
     <div className="container StatisticTemplate h-[60vh] overflow-hidden">
@@ -80,13 +77,11 @@ export const StatisticTemplate = () => {
             }
           </div>
           <div className="bottom table" style={{ height: '300px' }}>
-            <Table columns={columns} dataSource={reversedStudentList} pagination={false} ></Table>
+            <Table columns={columns} dataSource={studentList} pagination={false} ></Table>
           </div>
         </Col>
       </Row>
-      <p>
-        Barcode: {barcodeDisplay}
-      </p>
+
     </div>
   )
 }

@@ -11,8 +11,11 @@ export const getStudentListThunk = createAsyncThunk('manageStudent/getStudentLis
 });
 
 // payload: MSSV
-export const attendanceStudentThunk = createAsyncThunk('manageStudent/attendanceStudentThunk', async (payload: string, {rejectWithValue}) => {
+export const attendanceStudentThunk = createAsyncThunk('manageStudent/attendanceStudentThunk', async (payload: {
+    id: number
+}, {rejectWithValue}) => {
     try {
+        console.log(payload);
         await manageStudentService.attendanceStudent(payload);
     } catch (error) {
         return rejectWithValue(error);
