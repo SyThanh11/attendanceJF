@@ -8,5 +8,6 @@ export const manageStudentService = {
     getListStudent: () => api.get('/get-attendance-list'),
     attendanceStudent: (payload: {
         id: number
-    }) => api.put('/checkin-out', payload)
+    }) => api.put('/checkin-out', payload),
+    
 }

@@ -19,7 +19,7 @@ export const Header = () => {
           </Col>
           <Col span={16} className="flex justify-center items-center h-[20vh]">
             {
-              isWheel ? <h1 className="font-medium text-[px] text-[#FEB602]" style={{
+              isWheel ? <h1 className="font-medium text-[40px] text-[#FEB602]" style={{
                 fontFamily: "Potta One"
               }}>MINIGAME</h1> : (<img style={{
                 width: '45%'

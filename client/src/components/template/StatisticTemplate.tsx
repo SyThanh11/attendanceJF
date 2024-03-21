@@ -31,14 +31,14 @@ export const StatisticTemplate = () => {
     },
   ]
 
-  const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList) 
+  const { studentList, countStudent } : { studentList: Student[], countStudent: number } = useSelector((state: RootState) => state.manageStudent) 
 
-  // useEffect(() => { 
-  //   const timerId = setTimeout(() => { 
-  //     setCurrentTime(new Date());
-  //   }, 1000);
-  //   return () => clearTimeout(timerId);
-  // }, [currentTime])
+  useEffect(() => { 
+    const timerId = setTimeout(() => { 
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearTimeout(timerId);
+  }, [currentTime])
 
   useEffect(() => {
     dispatch(getStudentListThunk())
@@ -56,10 +56,10 @@ export const StatisticTemplate = () => {
 
   return (
     <div className="container StatisticTemplate h-[60vh] overflow-hidden">
-      <Row className="style={{ height: '300px' }}">
+      <Row className="h-full">
         <Col span={8} className="flex flex-col justify-center items-center">
           <h2 className="text-[#FF6C22] italic font-bold text-[1.5rem]">Sinh viên tham gia</h2>
-          <div className="item mt-2" style={{
+          <div className="item mt-2 flex items-center justify-center" style={{
             backgroundColor: '#FF6C22',
             width: '350px',
             height: '350px',
@@ -67,7 +67,7 @@ export const StatisticTemplate = () => {
             textAlign: 'center',
             lineHeight: '350px',
           }}>
-            <h2 className="font-bold text-white text-[10rem]">999</h2>
+            <h2 className="font-bold h-full text-white text-[10rem]">{countStudent}</h2>
           </div>
         </Col>
         <Col span={16} className="flex flex-col justify-center items-center">
@@ -77,7 +77,7 @@ export const StatisticTemplate = () => {
             }
           </div>
           <div className="bottom table" style={{ height: '300px' }}>
-            <Table columns={columns} dataSource={studentList} pagination={false} ></Table>
+            <Table columns={columns} dataSource={studentList.length < 6 ? studentList : studentList.slice(1,6)} pagination={false} ></Table>
           </div>
         </Col>
       </Row>

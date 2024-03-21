@@ -18,7 +18,7 @@ export const AttendanceTemplate = () => {
 
   return (
     <div className="AttendanceTemplate h-[100vh] bg-[#F6F3F1]">
-      <Row className='h-full'>
+      <Row className='h-full z-10'>
         <Col span={11} className='flex flex-col items-center border-r-2'>
           <div className='top h-[15%] w-full'>
             <div style={{
@@ -27,7 +27,7 @@ export const AttendanceTemplate = () => {
               <img src="" alt="" />
               <h1 style={{
                 fontFamily: 'Potta One'
-              }} className='font-medium text-[50px] text-[#FEB602]'>CHECK-IN</h1>
+              }} className='font-medium text-[50px] text-[#FEB602]'>CHECK-OUT</h1>
             </div>
           </div>
           <div className='center h-[30%] w-full flex justify-center items-center relative'>
@@ -94,7 +94,7 @@ export const AttendanceTemplate = () => {
                     <Button style={{
                     borderRadius: '10px',
                     boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
-                    }} className='mr-16 py-[20px] font-bold text-[#86A1E7] border-2 border-[#86A1E7] text-[14px] flex items-center justify-center'>CHECK-OUT
+                    }} className='mr-16 py-[20px] font-bold text-[#86A1E7] border-2 border-[#86A1E7] text-[14px] flex items-center justify-center z-20'>CHECK-OUT
                     </Button>
                   </div>
                 </div>
@@ -103,17 +103,19 @@ export const AttendanceTemplate = () => {
           </div>
         </Col>
       </Row>
-      <footer className="footer relative">
+      <footer className="footer relative z-0">
         <img src="/image/sun.png" alt="sun" style={{
               position: "absolute",
               bottom: -220,
               left: -67,  
               width: "28%",
+              zIndex: 0
         }}/>
         <img src="/image/wave.png" alt="wave" style={{
             position: "absolute",
             bottom: -90,
             width: "100%",
+            zIndex: 0
         }}/>
     </footer>
     </div>

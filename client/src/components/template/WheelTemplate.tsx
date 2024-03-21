@@ -1,12 +1,13 @@
 import { Button, Col, Row } from "antd"
+import { Spin } from "components";
 
 export const WheelTemplate = () => {
-  const studentPrize = new Array(10).fill('2110540');
+  const studentPrize = new Array(10).fill('???????');
   return (
     <div className="WheelTemplate h-[60vh]">
-      <Row>
+      <Row className="h-full">
         <Col span={8} className="flex justify-center relative">
-          <div className='bottom bg-white w-[50%] h-[90%]' style={{
+          <div className='bottom bg-white w-[50%] h-[76%]' style={{
             borderRadius: '15px',
             boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
           }}>
@@ -25,22 +26,14 @@ export const WheelTemplate = () => {
             <Button style={{
                 borderRadius: '10px',
                 position: 'absolute',
-                bottom: '-10px',
+                bottom: '60px',
                 left: '50%',
-                transform: 'translateX(-50%)'
-            }} className='w-[18%] py-[20px] bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center'>Random</Button>
+                transform: 'translateX(-50%)',
+            }} className='w-[18%] py-[20px] bg-[#FF6C22] font-medium text-white text-[18px] flex items-center justify-center !hover:cursor-pointer z-10'>Random</Button>
           </div>
         </Col>
         <Col span={8} className="flex justify-center items-center">
-          <div style={{
-            backgroundColor: '#FF6C22',
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            textAlign: 'center',
-            lineHeight: '400px',
-          }}>
-          </div>
+          <Spin></Spin>
         </Col>
         <Col span={8}>
           <div className="prize w-[48%] flex flex-col justify-center relative" style={{

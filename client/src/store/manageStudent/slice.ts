@@ -4,23 +4,23 @@ import { attendanceStudentThunk, getStudentListThunk } from "./thunk";
 
 type manageStudentState = {
     studentList: Student[],
+    countStudent: number
 }
 
 const initialState: manageStudentState = {
-    studentList: []
+    studentList: [],
+    countStudent: 0
 }
 
 export const manageStudentSlice = createSlice({
     name: "manageStudent",
     initialState,
     reducers: {
-        setStudentList: (state, action: PayloadAction<Student[]>) => {
-            state.studentList = action.payload;
-        }
     },
     extraReducers: (build) => {
         build.addCase(getStudentListThunk.fulfilled, (state, {payload}) => {
             state.studentList = payload.data;
+            state.countStudent = payload.data.length;
         }).addCase(attendanceStudentThunk.fulfilled, (_, {payload}) => {
             
         })
