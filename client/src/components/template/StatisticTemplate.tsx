@@ -55,7 +55,7 @@ export const StatisticTemplate = () => {
   }, [barcodeScan, dispatch]);
 
   return (
-    <div className="container StatisticTemplate h-[60vh] overflow-hidden">
+    <div className="container StatisticTemplate h-[60vh] overflow-hidden z-0">
       <Row className="h-full">
         <Col span={8} className="flex flex-col justify-center items-center">
           <h2 className="text-[#FF6C22] italic font-bold text-[1.5rem]">Sinh viên tham gia</h2>

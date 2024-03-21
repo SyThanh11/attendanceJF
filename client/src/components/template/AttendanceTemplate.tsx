@@ -5,16 +5,47 @@ import { useEffect, useState } from 'react';
 import { Student } from 'constant';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from 'store';
-import { getStudentListThunk } from 'store/manageStudent/thunk';
+import { attendanceStudentThunk, getStudentListThunk } from 'store/manageStudent/thunk';
+
+const ITEMS_PER_PAGE = 6;
 
 export const AttendanceTemplate = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState('');
+  const [displayedStudents, setDisplayedStudents] = useState([]);
+  const [studentInfo, setStudentInfo] = useState<Student>({
+    student_id: '0',
+    name: '',
+    school: '',
+    year: ''
+  });
   const dispatch = useAppDispatch();
-  
+
   const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList)
+  const totalPages = 1 + Math.round(studentList.length / ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    const filteredStudents = searchText !== '' ? 
+      studentList.filter(student => student.student_id.toString().includes(searchText)) :
+      studentList;
+  
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const studentsOnCurrentPage = filteredStudents.slice(startIndex, endIndex);
+    
+    setDisplayedStudents(studentsOnCurrentPage);
+  }, [studentList, currentPage, searchText]);
 
   useEffect(() => {
     dispatch(getStudentListThunk())
   }, [dispatch])
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
 
   return (
     <div className="AttendanceTemplate h-[100vh] bg-[#F6F3F1]">
@@ -62,13 +93,13 @@ export const AttendanceTemplate = () => {
             borderRadius: '15px',
             boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
           }}>
-            <p>Họ và tên:</p>
+            <p>Họ và tên: {studentInfo?.name}</p>
             <hr />
-            <p>MSSV:</p>
+            <p>MSSV: {studentInfo?.student_id === '0' ? '' : studentInfo?.student_id}</p>
             <hr />
-            <p>Lớp:</p>
+            <p>Trường: {studentInfo?.school}</p>
             <hr />
-            <p>Niên khóa:</p>
+            <p>Niên khóa: {studentInfo?.year}</p>
           </div>
         </Col>
         <Col span={13}>
@@ -80,18 +111,25 @@ export const AttendanceTemplate = () => {
             <Input className='w-[16%] mr-16 flex justify-center items-center' style={{
               border: '3px solid black',
               borderRadius: '20px',
-            }} size="large" placeholder="MSSV" suffix={<SearchOutlined className='text-[24px] font-bold'/>} />
+            }} size="large" placeholder="MSSV" suffix={<SearchOutlined className='text-[24px] font-bold'/>} onChange={handleSearch} />
           </div>
           <div className='content mt-4'>
             {
-              studentList.map((student, index) => (
+              displayedStudents.map((student, index) => (
                 <div key={index} className='item flex items-center justify-between h-[75px] bg-white border-b-[3px]'>
                   <div className='left flex flex-col ml-10'>
                     <h2 className='text-left text-[20px]'>{student.name}</h2>
                     <h3 className='text-left text-[16px] text-gray-500'>{student.student_id}</h3>
                   </div>
                   <div className='right flex items-center'>
-                    <Button style={{
+                    <Button onClick={() => { 
+                      setStudentInfo(student)
+                      dispatch(attendanceStudentThunk({
+                       id: student.student_id 
+                      })).then(() => { 
+                        dispatch(getStudentListThunk())
+                      })
+                    }} style={{
                     borderRadius: '10px',
                     boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
                     }} className='mr-16 py-[20px] font-bold text-[#86A1E7] border-2 border-[#86A1E7] text-[14px] flex items-center justify-center z-20'>CHECK-OUT
@@ -100,6 +138,14 @@ export const AttendanceTemplate = () => {
                 </div>
               ))
             }
+          </div>
+          <div className="pagination flex items-center justify-end mr-6 mt-4">
+            <Button className='z-30 mr-4 bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center !hover:cursor-pointer' onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+              Previous
+            </Button>
+            <Button className='z-30 bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center !hover:cursor-pointer' onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+              Next
+            </Button>
           </div>
         </Col>
       </Row>

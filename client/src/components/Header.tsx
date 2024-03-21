@@ -1,9 +1,15 @@
 import { Col, Row } from "antd"
+import { useState } from "react";
 import { useLocation } from "react-router-dom"
+import Navbar from "./Navbar";
 
 export const Header = () => {  
   const location = useLocation();
   const isWheel = location.pathname === "/wheel";
+  const [isNavbarVisible, setIsNavbarVisible] = useState(false);
+  const toggleNavbarVisibility = () => {
+    setIsNavbarVisible(!isNavbarVisible);
+  };
 
   return (
     <header className="header h-[20vh]">
@@ -27,7 +33,8 @@ export const Header = () => {
             }
           </Col>
           <Col span={4} className="h-[20vh]">
-            <img src="/image/starOrange.png" alt="starOrange" />
+            <img src="/image/starOrange.png" alt="starOrange" onClick={toggleNavbarVisibility}/>
+            {isNavbarVisible && <Navbar />}
           </Col>
         </Row>
     </header>

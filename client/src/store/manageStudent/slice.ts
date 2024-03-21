@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { Student } from "constant";
 import { attendanceStudentThunk, getStudentListThunk } from "./thunk";
 
