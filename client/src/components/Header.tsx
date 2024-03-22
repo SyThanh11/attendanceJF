@@ -25,15 +25,20 @@ export const Header = () => {
           </Col>
           <Col span={16} className="flex justify-center items-center h-[20vh]">
             {
-              isWheel ? <h1 className="font-medium text-[40px] text-[#FEB602]" style={{
-                fontFamily: "Potta One"
-              }}>MINIGAME</h1> : (<img style={{
+              isWheel ? <div className="flex items-center justify-center">
+                <img className="w-[5%] mr-4" src="/image/guildlines.png" alt="guildline" />
+                <h1 className="font-medium text-[40px] text-[#FEB602]" style={{
+                  fontFamily: "Potta One"
+                }}>
+                  MINIGAME
+                </h1>
+              </div> : (<img style={{
                 width: '45%'
               }} src="/image/logoStatitic.png" alt="logoStatitic" />)
             }
           </Col>
           <Col span={4} className="h-[20vh]">
-            <img src="/image/starOrange.png" alt="starOrange" onClick={toggleNavbarVisibility}/>
+            <img className="hover:cursor-pointer" src="/image/starOrange.png" alt="starOrange" onClick={toggleNavbarVisibility}/>
             {isNavbarVisible && <Navbar />}
           </Col>
         </Row>

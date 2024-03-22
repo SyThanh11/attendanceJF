@@ -9,5 +9,5 @@ export const manageStudentService = {
     attendanceStudent: (payload: {
         id: number
     }) => api.put('/checkin-out', payload),
-    
+    getLuckyList: () => api.get('/get-lucky-list')
 }

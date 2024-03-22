@@ -3,8 +3,9 @@ import { Student } from "constant"
 import { useState } from "react"
 import { Wheel } from "react-custom-roulette"
 import { useSelector } from "react-redux"
-import { RootState } from "store"
+import { RootState, useAppDispatch } from "store"
 import PrizeModal from "./PrizeModal"
+import { manageStudentAction } from "store/manageStudent/slice"
 
 const defaultData = [
   { option: '' },
@@ -20,16 +21,16 @@ const defaultData = [
 ]
   
 const backgroundColors = [
-  '#FF7F50',
-  '#6495ED',
-  '#7FFFD4',
-  '#8A2BE2',
-  '#FFD700',
-  '#20B2AA',
-  '#32CD32',
-  '#FF69B4',
-  '#9370DB',
-  '#FF4500'
+  '#BFCBF4',
+  '#9CB3F1',
+  '#9DC1A8',
+  '#669175',
+  '#D6F2F0',
+  '#A5D4DC',
+  '#FFEECC',
+  '#F4D798',
+  '#FAD8CA',
+  '#F9B698'
 ]
   
 const textColors = ['BLACK']
@@ -39,12 +40,13 @@ export const Spin = () => {
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [prize, setPrize] = useState(null);
   const [prizeInfo, setPrizeInfo] = useState(null);
-  const studentList: Student[]  = useSelector((state: RootState) => state.manageStudent.studentList)
-  // const [student, setStudent] = useState(null)
-  // const [data, setData] = useState(defaultData)
+  const luckyList: Student[]  = useSelector((state: RootState) => state.manageStudent.luckyList)
+  const wheelData = luckyList.map((student) => ({ option: student.student_id }));
+  const dispatch = useAppDispatch();
 
-  const handleSpinClick = () => {
-    const newPrizeNumber = Math.floor(Math.random() * defaultData.length)
+  const handleSpinClick = (student: Student) => {
+    const newPrizeNumber = Math.floor(Math.random() * 10)
+    dispatch(manageStudentAction.addStudentPrize(student))
     setPrizeNumber(newPrizeNumber)
     setMustSpin(true)
   }
@@ -56,7 +58,7 @@ export const Spin = () => {
 
   const handleStopSpinning = () => {
     setMustSpin(false);
-    const student = studentList[prizeNumber];
+    const student = luckyList[prizeNumber];
     setPrize(`Prize: ${prizeNumber}`);
     setPrizeInfo(student);
   }
@@ -66,16 +68,19 @@ export const Spin = () => {
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
-        data={defaultData}
+        data={luckyList.length > 0 ? wheelData : defaultData}
         backgroundColors={backgroundColors}
         textColors={textColors}
-        outerBorderWidth={3}
+        outerBorderWidth={0}
         radiusLineWidth={2}
+        radiusLineColor="rgba(255, 255, 255, 0)"
+        fontFamily="Fira Sans"
+        fontWeight={600}
 
         onStopSpinning={handleStopSpinning}
       />
       <Button
-        onClick={handleSpinClick}
+        onClick={() => {handleSpinClick(luckyList[prizeNumber])}}
         disabled={mustSpin}
         style={{
             borderRadius: '10px',

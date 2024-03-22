@@ -1,8 +1,30 @@
 import { Button, Col, Row } from "antd"
 import { Spin } from "components";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "store";
+import { manageStudentAction } from "store/manageStudent/slice";
+import { getLuckyListThunk } from "store/manageStudent/thunk";
 
 export const WheelTemplate = () => {
-  const studentPrize = new Array(10).fill('???????');
+  const luckyPrize = useSelector((state: RootState) => state.manageStudent.luckyList);
+  const [visibleItems, setVisibleItems] = useState([]);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const timeoutIds = [];
+    luckyPrize.forEach((item, index) => {
+      const timeoutId = setTimeout(() => {
+        setVisibleItems(prevItems => [...prevItems, item]);
+      }, 3000 * (index + 1));
+      timeoutIds.push(timeoutId);
+    });
+  
+    return () => {
+      timeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
+    };
+  }, [luckyPrize]);
+
   return (
     <div className="WheelTemplate h-[60vh]">
       <Row className="h-full">
@@ -17,13 +39,19 @@ export const WheelTemplate = () => {
               overflow: 'hidden'
             }} className="bg-[#FAA377] font-semibold text-center text-[16px] py-2">MSSV</h1>
             <hr />
-            {studentPrize.map((item, index) => (
+            {visibleItems?.map((item, index) => (
               <div key={index} className="flex justify-center items-center">
-                <p className="text-center py-[5px]">{item}</p>
-                {index < studentPrize.length - 1 && <hr />}
+                <p className="text-center py-[5px]">{item.student_id}</p>
+                {index < visibleItems?.length - 1 && <hr />}
               </div>
             ))}
-            <Button style={{
+            <Button onClick={() => { 
+              if(luckyPrize){
+                dispatch(manageStudentAction.clearLuckyList());
+                setVisibleItems([]);
+              }
+              dispatch(getLuckyListThunk())
+            }} style={{
                 borderRadius: '10px',
                 position: 'absolute',
                 bottom: '60px',
