@@ -1,5 +1,4 @@
 import { Col, Row, Table } from "antd";
-import { Student } from "constant/type";
 import { useEffect, useState } from "react";
 import '../style.scss';
 import { useSelector } from "react-redux";
@@ -31,7 +30,7 @@ export const StatisticTemplate = () => {
     },
   ]
 
-  const { studentList, countStudent } : { studentList: Student[], countStudent: number } = useSelector((state: RootState) => state.manageStudent) 
+  const { studentList, countStudent } = useSelector((state: RootState) => state.manageStudent) 
 
   useEffect(() => { 
     const timerId = setTimeout(() => { 
