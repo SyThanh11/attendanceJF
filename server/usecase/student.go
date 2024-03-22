@@ -9,7 +9,7 @@ import (
 type StudentUsecase interface {
 	GetAttendanceList() ([]*StudentInfo, error)
 	GetCheckOutList() ([]*StudentInfo, error)
-	HandleCheckInOut(student int) (Status, error)
+	HandleCheckInOut(student int) (*StudentInfo, error)
 	GetLuckyAttendeeList() ([]*StudentInfo, error)
 }
 
@@ -45,7 +45,6 @@ func (u *studentUsecaseImpl) GetAttendanceList() ([]*StudentInfo, error) {
 			attendanceList = append(attendanceList, &StudentInfo{
 				StudentID: student.ID,
 				Name:      student.Name,
-				Surname:   student.Surname,
 				School:    student.School,
 				Year:      student.Year,
 			})
@@ -67,7 +66,6 @@ func (u *studentUsecaseImpl) GetCheckOutList() ([]*StudentInfo, error) {
 			checkOutList = append(checkOutList, &StudentInfo{
 				StudentID: student.ID,
 				Name:      student.Name,
-				Surname:   student.Surname,
 				School:    student.School,
 				Year:      student.Year,
 			})
@@ -77,19 +75,19 @@ func (u *studentUsecaseImpl) GetCheckOutList() ([]*StudentInfo, error) {
 	return checkOutList, nil
 }
 
-type Status string
+// type Status string
 
-const (
-	CheckIn  Status = "checkin"
-	CheckOut Status = "checkout"
-)
+// const (
+// 	CheckIn  Status = "checkin"
+// 	CheckOut Status = "checkout"
+// )
 
-func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (Status, error) {
-	var status Status
+func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (*StudentInfo, error) {
+	// var status Status
 
 	student, err := u.studentRepository.FindByID(studentID)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	currentTime := time.Now()
@@ -100,10 +98,10 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (Status, error) {
 
 		err = u.studentRepository.Update(student)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 
-		status = CheckIn
+		// status = CheckIn
 	} else if !student.IsCheckout {
 		// duration := currentTime.Sub(student.TimeCheckin)
 		// if duration < time.Hour {
@@ -115,13 +113,17 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (Status, error) {
 
 		err = u.studentRepository.Update(student)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 
-		status = CheckOut
+		// status = CheckOut
 	}
 
-	return status, nil
+	return &StudentInfo{
+		StudentID: student.ID,
+		Name: student.Name,
+
+	}, nil
 }
 
 func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
@@ -135,7 +137,7 @@ func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
 			return nil, err
 		}
 		// fmt.Print(luckyAttendee)
-		if !luckyAttendee.IsLuckyAttendee && !luckyAttendee.IsComittee {
+		if luckyAttendee.IsCheckin && !luckyAttendee.IsCheckout && !luckyAttendee.IsLuckyAttendee && !luckyAttendee.IsComittee {
 			luckyAttendee.IsLuckyAttendee = true
 			if err = u.studentRepository.Update(luckyAttendee); err != nil {
 				return nil, err
@@ -143,7 +145,6 @@ func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
 
 			luckyAttendeeList = append(luckyAttendeeList, &StudentInfo{
 				StudentID: luckyAttendee.ID,
-				Surname:   luckyAttendee.Surname,
 				Name:      luckyAttendee.Name,
 				School:    luckyAttendee.School,
 				Year:      luckyAttendee.Year,

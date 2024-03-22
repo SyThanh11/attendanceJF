@@ -71,11 +71,10 @@ func initData() {
 
 		student := model.Student{
 			ID:              studentID,
-			Surname:         row.Cells[1].String(),
-			Name:            row.Cells[2].String(),
-			School:          row.Cells[3].String(),
-			Year:            model.SchoolYear(row.Cells[4].String()),
-			IsComittee:      row.Cells[5].String() == "Ban tổ chức",
+			Name:            row.Cells[1].String(),
+			School:          row.Cells[2].String(),
+			Year:            model.SchoolYear(row.Cells[3].String()),
+			IsComittee:      row.Cells[4].String() == "Ban tổ chức",
 			IsCheckin:       false,
 			IsCheckout:      false,
 			IsLuckyAttendee: false,
