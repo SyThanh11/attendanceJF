@@ -2,7 +2,6 @@ package handler
 
 import (
 	"attendanceJF/pkg"
-	"attendanceJF/usecase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -58,7 +57,7 @@ type StudentIDReq struct {
 //   - 500: server error
 func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 	var req StudentIDReq
-	
+
 	err := c.ShouldBind(&req)
 	if err != nil {
 		responseBadRequestError(c, pkg.InvalidData)
@@ -70,19 +69,13 @@ func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 	// 	return
 	// }
 
-	status, err := h.StudentUsecase.HandleCheckInOut(req.ID)
+	student, err := h.StudentUsecase.HandleCheckInOut(req.ID)
 	if err != nil {
 		responseServerError(c, pkg.ParseError(err))
 		return
 	}
 
-	if status == usecase.CheckIn {
-		responseSuccess(c, "checkin")
-		return
-	} else if status == usecase.CheckOut {
-		responseSuccess(c, "checkout")
-		return
-	}
+	responseSuccess(c, student)
 }
 
 // GetLuckyAttendeeList provide list of attendees to play spinner lottery
