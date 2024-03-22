@@ -137,7 +137,7 @@ func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
 			return nil, err
 		}
 		// fmt.Print(luckyAttendee)
-		if luckyAttendee.IsCheckin && !luckyAttendee.IsCheckout && !luckyAttendee.IsLuckyAttendee && !luckyAttendee.IsComittee {
+		if !luckyAttendee.IsLuckyAttendee && !luckyAttendee.IsComittee {
 			luckyAttendee.IsLuckyAttendee = true
 			if err = u.studentRepository.Update(luckyAttendee); err != nil {
 				return nil, err
