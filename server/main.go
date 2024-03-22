@@ -5,8 +5,10 @@ import (
 	"attendanceJF/repository"
 	"attendanceJF/settings"
 	"attendanceJF/usecase"
-	"github.com/gin-contrib/cors"
 	"fmt"
+	"os"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -32,8 +34,9 @@ func main() {
 	router := gin.Default()
 
 	// Configure CORS middleware
+	domain := os.Getenv("DOMAIN")
     router.Use(cors.New(cors.Config{
-        AllowOrigins: []string{"http://localhost:3000"}, // Allow requests from localhost:3000
+        AllowOrigins: []string{domain}, // Allow requests from localhost:3000
         AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
         AllowHeaders: []string{"Origin", "Content-Type"},
     }))
