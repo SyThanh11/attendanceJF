@@ -31,7 +31,7 @@ export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
       <audio ref={fireworksSoundRef} src={fireworksSound} preload="auto" />
       <p>You won: {prize}</p>
       <p>Student name: {student?.name}</p>
-      <p>Class: {student?.class}</p>
+      <p>Id: {student?.student_id}</p>
       <p>School: {student?.school}</p>
     </Modal>
   );

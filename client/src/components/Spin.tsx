@@ -40,13 +40,12 @@ export const Spin = (probs) => {
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [prize, setPrize] = useState(null);
   const [prizeInfo, setPrizeInfo] = useState(null);
-  const luckyList: Student[]  = useSelector((state: RootState) => state.manageStudent.luckyList)
+  const luckyList: Student[] = useSelector((state: RootState) => state.manageStudent.luckyList)
   const wheelData = luckyList.map((student) => ({ option: student.student_id }));
   const dispatch = useAppDispatch();
 
-  const handleSpinClick = (student: Student) => {
-    const newPrizeNumber = Math.floor(Math.random() * 10)
-    dispatch(manageStudentAction.addStudentPrize(student))
+  const handleSpinClick = () => {
+    const newPrizeNumber = Math.floor(Math.random() * luckyList.length)
     setPrizeNumber(newPrizeNumber)
     setMustSpin(true)
   }
@@ -57,10 +56,11 @@ export const Spin = (probs) => {
   }
 
   const handleStopSpinning = () => {
-    setMustSpin(false);
     const student = luckyList[prizeNumber];
+    dispatch(manageStudentAction.addStudentPrize(student))
     setPrize(`Prize: ${probs.prizeNumber}`);
     setPrizeInfo(student);
+    setMustSpin(false);
   }
 
   return (
@@ -80,7 +80,7 @@ export const Spin = (probs) => {
         onStopSpinning={handleStopSpinning}
       />
       <Button
-        onClick={() => {handleSpinClick(luckyList[prizeNumber])}}
+        onClick={handleSpinClick}
         disabled={mustSpin}
         style={{
             borderRadius: '10px',

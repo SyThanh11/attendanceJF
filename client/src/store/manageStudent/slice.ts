@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 type manageStudentState = {
     studentList?: Student[],
+    studentDetail?: Student,
     countStudent?: number,
     luckyList?: Student[],
     studentPrize?: Student[],
@@ -13,6 +14,7 @@ type manageStudentState = {
 
 const initialState: manageStudentState = {
     studentList: [],
+    studentDetail: null,
     countStudent: 0,
     luckyList: [],
     studentPrize: [],
@@ -40,7 +42,8 @@ export const manageStudentSlice = createSlice({
         build.addCase(getStudentListThunk.fulfilled, (state, {payload}) => {
             state.studentList = payload.data;
             state.countStudent = payload.data.length;
-        }).addCase(attendanceStudentThunk.fulfilled, () => {
+        }).addCase(attendanceStudentThunk.fulfilled, (state, {payload}) => {
+            state.studentDetail = payload.data
             toast.success('Thành công')
         }).addCase(attendanceStudentThunk.rejected, () => {
             toast.error('Bạn đã check out rồi!')

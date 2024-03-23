@@ -1,4 +1,4 @@
-import { Col, Row, Table } from "antd";
+import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import '../style.scss';
 import { useSelector } from "react-redux";
@@ -19,21 +19,7 @@ export const StatisticTemplate = () => {
     minLength: 3
   })
 
-  const columns = [
-    {
-      title: 'Họ và tên',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: string) => <a>{text}</a>,
-    },
-    {
-      title: 'Mã số sinh viên',
-      dataIndex: 'student_id',
-      key: 'student_id',
-    },
-  ]
-
-  const { studentList, countStudent } = useSelector((state: RootState) => state.manageStudent) 
+  const { studentList, countStudent, studentDetail } = useSelector((state: RootState) => state.manageStudent) 
 
   useEffect(() => { 
     const timerId = setTimeout(() => { 
@@ -93,7 +79,26 @@ export const StatisticTemplate = () => {
             }
           </div>
           <div className="bottom table" style={{ height: '300px' }}>
-            <Table columns={columns} dataSource={studentList.length < 6 ? studentList : studentList.slice(1,6)} pagination={false} ></Table>
+            <table style={{  width: '100%', height: '300px' }}>
+              <thead>
+                <tr>
+                  <th style={{ padding: '10px', paddingInline: '80px' }}>Họ và tên</th>
+                  <th style={{ padding: '10px', paddingInline: '80px' }}>MSSV</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className={studentDetail == null ? 'hidden' : 'table-row'}>
+                    <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.name}</td>
+                    <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.student_id}</td>
+                </tr>
+                {studentList.slice(1,6).map((student, index) => (
+                  <tr key={index}>
+                    <td style={{ padding: '10px' }}>{student.name}</td>
+                    <td style={{ padding: '10px' }}>{student.student_id}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </Col>
       </Row>

@@ -15,8 +15,8 @@ export const attendanceStudentThunk = createAsyncThunk('manageStudent/attendance
     id: number
 }, {rejectWithValue}) => {
     try {
-        console.log(payload);
-        await manageStudentService.attendanceStudent(payload);
+        const data = await manageStudentService.attendanceStudent(payload);
+        return data.data;
     } catch (error) {
         return rejectWithValue(error);
     }

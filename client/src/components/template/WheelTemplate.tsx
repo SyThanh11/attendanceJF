@@ -76,7 +76,7 @@ export const WheelTemplate = () => {
           </div>
         </Col>
         <Col span={8} className="flex justify-center items-center">
-          <Spin showDataWheel={showDataWheel} prizeNumber={4-studentPrize.length}></Spin>
+          <Spin showDataWheel={showDataWheel} prizeNumber={4-studentPrize?.length}></Spin>
         </Col>
         <Col span={8}>
           <div className="prize w-[48%] flex flex-col justify-center relative" style={{
