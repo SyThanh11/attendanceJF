@@ -6,8 +6,8 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='Navbar flex justify-center relative z-20 h-[180px] -mt-[30px]'>
-      <div className="navbar-content w-[50%] h-[100%] flex flex-col items-center " style={{
+    <div className='Navbar flex justify-center relative z-[100] h-[180px] -mt-[30px]'>
+      <div className="navbar-content bg-gray-100 w-[50%] h-[100%] flex flex-col items-center " style={{
         borderRadius: '20px',
         boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' 
       }}>

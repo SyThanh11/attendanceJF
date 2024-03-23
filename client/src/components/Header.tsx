@@ -38,7 +38,9 @@ export const Header = () => {
             }
           </Col>
           <Col span={4} className="h-[20vh]">
-            <img className="hover:cursor-pointer" src="/image/starOrange.png" alt="starOrange" onClick={toggleNavbarVisibility}/>
+            <img className={
+              isWheel ? "hover:cursor-pointer w-[80%] transform rotate-45" : "hover:cursor-pointer"
+            } src="/image/starOrange.png" alt="starOrange" onClick={toggleNavbarVisibility}/>
             {isNavbarVisible && <Navbar />}
           </Col>
         </Row>

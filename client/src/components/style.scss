@@ -57,4 +57,12 @@ $button-color-2: #3C90CC;
         padding-left: 12px
     }
 }
+.Modal {
+    .ant-modal-footer {
+        display: flex!important;
+        justify-content: center!important;
+        align-items: center!important;
+        text-align: center!important;
+    }
+ }
 

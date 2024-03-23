@@ -13,15 +13,10 @@ export const AttendanceTemplate = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [displayedStudents, setDisplayedStudents] = useState([]);
-  const [studentInfo, setStudentInfo] = useState<Student>({
-    student_id: '0',
-    name: '',
-    school: '',
-    year: ''
-  });
   const dispatch = useAppDispatch();
 
-  const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList)
+  const studentList: Student[] = useSelector((state: RootState) => state.manageStudent.studentList);
+  const studentDetail: Student = useSelector((state: RootState) => state.manageStudent.studentDetail);
   const totalPages = 1 + Math.round(studentList.length / ITEMS_PER_PAGE);
 
   useEffect(() => {
@@ -55,7 +50,7 @@ export const AttendanceTemplate = () => {
             <div style={{
               boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
             }} className='logo flex items-center justify-center bg-white h-[80%] w-full'>
-              <img src="" alt="" />
+              <img className='w-[11%] mr-4' src="/image/guildlines.png" alt="guildlines" />
               <h1 style={{
                 fontFamily: 'Potta One'
               }} className='font-medium text-[50px] text-[#FEB602]'>CHECK-OUT</h1>
@@ -93,13 +88,13 @@ export const AttendanceTemplate = () => {
             borderRadius: '15px',
             boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
           }}>
-            <p>Họ và tên: {studentInfo?.name}</p>
+            <p>Họ và tên: {studentDetail?.name}</p>
             <hr />
-            <p>MSSV: {studentInfo?.student_id === '0' ? '' : studentInfo?.student_id}</p>
+            <p>MSSV: {studentDetail?.student_id === '0' ? '' : studentDetail?.student_id}</p>
             <hr />
-            <p>Trường: {studentInfo?.school}</p>
+            <p>Trường: {studentDetail?.school}</p>
             <hr />
-            <p>Niên khóa: {studentInfo?.year}</p>
+            <p>Niên khóa: {studentDetail?.year}</p>
           </div>
         </Col>
         <Col span={13}>
@@ -123,7 +118,6 @@ export const AttendanceTemplate = () => {
                   </div>
                   <div className='right flex items-center'>
                     <Button onClick={() => { 
-                      setStudentInfo(student)
                       dispatch(attendanceStudentThunk({
                        id: student.student_id 
                       })).then(() => { 
