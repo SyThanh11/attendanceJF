@@ -24,7 +24,10 @@ export const WheelTemplate = () => {
         setVisibleItems(prevItems => [...prevItems, item]);
         itemsRendered++;
         if (itemsRendered === luckyList.length) {
-          setShowDataWheel(true);
+          setTimeout(() => { 
+            setShowDataWheel(true);
+            setVisibleItems([]);
+          }, 2000)
         }
       }, 3000 * (index + 1));
       timeoutIds.push(timeoutId);
