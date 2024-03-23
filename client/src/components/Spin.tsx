@@ -35,7 +35,7 @@ const backgroundColors = [
   
 const textColors = ['BLACK']
 
-export const Spin = () => {
+export const Spin = (probs) => {
   const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
   const [prize, setPrize] = useState(null);
@@ -68,7 +68,7 @@ export const Spin = () => {
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
-        data={luckyList.length > 0 ? wheelData : defaultData}
+        data={probs.showDataWheel ? wheelData : defaultData}
         backgroundColors={backgroundColors}
         textColors={textColors}
         outerBorderWidth={0}

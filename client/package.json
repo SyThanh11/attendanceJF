@@ -28,7 +28,6 @@
     "react-toastify": "^10.0.5",
     "rollup": "^4.13.0",
     "sass": "^1.71.1",
-    "socket.io-client": "^4.7.5",
     "use-scan-detection": "^0.2.3"
   },
   "proxy": "http://localhost:8080",

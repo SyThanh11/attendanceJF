@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "store";
 import { attendanceStudentThunk, getStudentListThunk } from "store/manageStudent/thunk";
 import useScanDetection from "use-scan-detection";
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
-const socket = io("http://localhost:8080");
+// const socket = io("http://localhost:8080");
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -53,7 +53,7 @@ export const StatisticTemplate = () => {
       })).then(() => {
         dispatch(getStudentListThunk());
         // Khi checkin thành công
-        socket.emit('checkin-notification');
+        // socket.emit('checkin-notification');
       });
     }
   }, [barcodeScan, dispatch]);
@@ -64,11 +64,11 @@ export const StatisticTemplate = () => {
     //   total: number,
     // }
 
-  useEffect(() => {
-    socket.on('attendance-update', (updatedStudentData) => {
-      console.log('Received attendance update:', updatedStudentData);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on('attendance-update', (updatedStudentData) => {
+  //     console.log('Received attendance update:', updatedStudentData);
+  //   });
+  // }, []);
 
   return (
     <div className="container StatisticTemplate h-[60vh] overflow-hidden z-0">
