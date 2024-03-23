@@ -59,7 +59,7 @@ export const Spin = (probs) => {
   const handleStopSpinning = () => {
     setMustSpin(false);
     const student = luckyList[prizeNumber];
-    setPrize(`Prize: ${prizeNumber}`);
+    setPrize(`Prize: ${probs.prizeNumber}`);
     setPrizeInfo(student);
   }
 
@@ -88,7 +88,7 @@ export const Spin = (probs) => {
             paddingInline: '40px'
         }} className='w-[20%] py-[20px] bg-[#FF6C22] font-medium text-white text-[18px] flex items-center justify-center !hover:cursor-pointer z-10'> SPIN
       </Button>
-      <PrizeModal prize={prize} student={prizeInfo} onClose={handleCloseModal} />
+      <PrizeModal prize={prize} student={prizeInfo} onClose={handleCloseModal} prizeNumber={probs.prizeNumber}/>
     </div>
   )
 }

@@ -1,18 +1,22 @@
 import { Modal, Button } from 'antd';
 import fireworksSound from '../../public/music/fireworks.mp3';
 import { useEffect, useRef } from 'react';
+import { useAppDispatch } from 'store';
+import { manageStudentAction } from 'store/manageStudent/slice';
 
-export const PrizeModal = ({ prize, student, onClose }) => {
+export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
   const fireworksSoundRef = useRef(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (prize) {
-      fireworksSoundRef.current.play(); // Phát âm thanh pháo hoa khi modal xuất hiện
+      fireworksSoundRef.current.play(); 
     }
   }, [prize]);
 
-  const handleModalClose = () => {
+  const handleModalClose = (prizeNumber) => {
     fireworksSoundRef.current.pause(); 
+    dispatch(manageStudentAction.setIsShowPrizes(prizeNumber));
     onClose(); 
   };
 
@@ -21,7 +25,7 @@ export const PrizeModal = ({ prize, student, onClose }) => {
       title="Congratulations!"
       open={!!prize}
       footer={[
-        <Button key="ok" onClick={handleModalClose}>OK</Button>,
+        <Button key="ok" onClick={() => { handleModalClose(prizeNumber-1) }}>OK</Button>,
       ]}
     >
       <audio ref={fireworksSoundRef} src={fireworksSound} preload="auto" />

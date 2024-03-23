@@ -8,10 +8,11 @@ import { manageStudentAction } from "store/manageStudent/slice";
 import { getLuckyListThunk } from "store/manageStudent/thunk";
 
 export const WheelTemplate = () => {
-  const { luckyList, studentPrize } = useSelector((state: RootState) => ({
+  const { luckyList, studentPrize, isShowPrizes } = useSelector((state: RootState) => ({
     luckyList: state.manageStudent.luckyList,
-    studentPrize: state.manageStudent.studentPrize
-  })) as { luckyList: Student[], studentPrize: Student[] };
+    studentPrize: state.manageStudent.studentPrize,
+    isShowPrizes: state.manageStudent.isShowPrizes
+  })) as { luckyList: Student[], studentPrize: Student[], isShowPrizes: boolean[] };
   const [visibleItems, setVisibleItems] = useState([]);
   const [showDataWheel, setShowDataWheel] = useState(false);
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ export const WheelTemplate = () => {
             setVisibleItems([]);
           }, 2000)
         }
-      }, 3000 * (index + 1));
+      }, 1000 * (index + 1));
       timeoutIds.push(timeoutId);
     });
   
@@ -75,7 +76,7 @@ export const WheelTemplate = () => {
           </div>
         </Col>
         <Col span={8} className="flex justify-center items-center">
-          <Spin showDataWheel={showDataWheel}></Spin>
+          <Spin showDataWheel={showDataWheel} prizeNumber={4-studentPrize.length}></Spin>
         </Col>
         <Col span={8}>
           <div className="prize w-[48%] flex flex-col justify-center relative" style={{
@@ -88,7 +89,7 @@ export const WheelTemplate = () => {
               overflow: 'hidden'
             }} className="bg-[#FEB602] text-center font-medium text-[16px] py-2">Giải nhất</h1>
             <h2 className="text-center py-2">{
-              studentPrize?.length === 3 ? studentPrize[2].name + studentPrize[2].student_id : ''
+              ( isShowPrizes[0] && studentPrize?.length == 3 )  ? studentPrize[2].name + studentPrize[2].student_id : ''
             }</h2>
             <img src="/image/first.png" alt="first" style={{
               position: 'absolute',
@@ -107,7 +108,7 @@ export const WheelTemplate = () => {
               overflow: 'hidden'
             }} className="bg-[#DDE1E6] text-center font-medium text-[16px] py-2">Giải nhì</h1>
             <h2 className="text-center py-2">{
-              studentPrize?.length >= 2 ? studentPrize[1].name + studentPrize[1].student_id : ''
+             ( isShowPrizes[1] && studentPrize?.length >= 2 ) ? studentPrize[1].name + studentPrize[1].student_id : ''
             }</h2>
             <img src="/image/second.png" alt="second" style={{
               position: 'absolute',
@@ -127,7 +128,7 @@ export const WheelTemplate = () => {
               overflow: 'hidden'
             }} className="bg-[#FAA377] text-center font-medium text-[16px] py-2">Giải ba</h1>
             <h2 className="text-center py-2">{
-              studentPrize?.length >= 1 ? studentPrize[0].name + studentPrize[0].student_id : ''
+              ( isShowPrizes[2] && studentPrize?.length >= 1) ? studentPrize[0].name + studentPrize[0].student_id : ''
             }</h2>
             <img src="/image/third.png" alt="third" style={{
               position: 'absolute',

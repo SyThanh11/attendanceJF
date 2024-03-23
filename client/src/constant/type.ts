@@ -3,5 +3,5 @@ export type Student = {
     surname?: string,
     name?: string,
     school?: string,
-    year?: string
+    year?: string,
 }
