@@ -2,6 +2,7 @@ package handler
 
 import (
 	"attendanceJF/usecase"
+	"fmt"
 
 	"github.com/gorilla/websocket"
 )
@@ -14,7 +15,7 @@ type ConnectionManager struct {
 }
 
 type CheckinMessage struct {
-	student usecase.StudentInfo
+	StudentInfo usecase.StudentInfo
 }
 
 func NewConnectionManager() *ConnectionManager {
@@ -38,6 +39,8 @@ func (manager *ConnectionManager) Start() {
 			}
 		case message := <-manager.broadcast:
 			for connection := range manager.clients {
+				fmt.Print(message)
+				fmt.Println(&message)
 				err := connection.WriteJSON(message)
 				if err != nil {
 					connection.Close()
@@ -59,5 +62,6 @@ func (manager *ConnectionManager) RemoveClient(client *websocket.Conn) {
 }
 
 func (manager *ConnectionManager) AddMessage(student *usecase.StudentInfo) {
+	// fmt.Print(*student)
 	manager.broadcast <- CheckinMessage{*student}
 }

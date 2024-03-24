@@ -47,11 +47,11 @@ func (u *studentUsecaseImpl) GetAttendanceList() ([]*StudentInfo, error) {
 	for _, student := range studentList {
 		if student.IsCheckin {
 			attendanceList = append(attendanceList, &StudentInfo{
-				StudentID: student.ID,
-				Name:      student.Name,
-				School:    student.School,
-				Year:      student.Year,
-				IsCheckin: student.IsCheckin,
+				StudentID:  student.ID,
+				Name:       student.Name,
+				School:     student.School,
+				Year:       student.Year,
+				IsCheckin:  student.IsCheckin,
 				IsCheckout: student.IsCheckout,
 			})
 		}
@@ -70,11 +70,11 @@ func (u *studentUsecaseImpl) GetCheckOutList() ([]*StudentInfo, error) {
 	for _, student := range studentList {
 		if student.IsCheckout {
 			checkOutList = append(checkOutList, &StudentInfo{
-				StudentID: student.ID,
-				Name:      student.Name,
-				School:    student.School,
-				Year:      student.Year,
-				IsCheckin: student.IsCheckin,
+				StudentID:  student.ID,
+				Name:       student.Name,
+				School:     student.School,
+				Year:       student.Year,
+				IsCheckin:  student.IsCheckin,
 				IsCheckout: student.IsCheckout,
 			})
 		}
@@ -128,8 +128,12 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (*StudentInfo, erro
 	}
 
 	return &StudentInfo{
-		StudentID: student.ID,
-		Name:      student.Name,
+		StudentID:  student.ID,
+		Name:       student.Name,
+		School:     student.School,
+		Year:       student.Year,
+		IsCheckin:  student.IsCheckin,
+		IsCheckout: student.IsCheckout,
 	}, nil
 }
 
