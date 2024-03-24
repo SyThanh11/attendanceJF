@@ -14,7 +14,7 @@ type ConnectionManager struct {
 }
 
 type CheckinMessage struct {
-	student usecase.StudentInfo
+	StudentInfo usecase.StudentInfo
 }
 
 func NewConnectionManager() *ConnectionManager {

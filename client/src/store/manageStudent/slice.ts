@@ -10,6 +10,7 @@ type manageStudentState = {
     luckyList?: Student[],
     studentPrize?: Student[],
     isShowPrizes?: boolean[],
+    displayStudent?: Student[]
 }
 
 const initialState: manageStudentState = {
@@ -19,6 +20,7 @@ const initialState: manageStudentState = {
     luckyList: [],
     studentPrize: [],
     isShowPrizes: [false, false, false],
+    displayStudent: []
 }
 
 export const manageStudentSlice = createSlice({
@@ -31,20 +33,23 @@ export const manageStudentSlice = createSlice({
         addStudentPrize: (state, {payload}) => {
             state.studentPrize.push(payload)
         },
+        removeStudentPrize: (state) => {
+            state.studentPrize.pop()
+        },
         setIsShowPrizes: (state, {payload}) => {
             const newIsShowPrizes = state.isShowPrizes.slice(); 
             newIsShowPrizes[Number(payload)] = true; 
             state.isShowPrizes = newIsShowPrizes; 
             console.log(state.isShowPrizes);
         },
-        setStudentList: (state, {payload}) => {
-            state.studentList = payload
+        setDisplayStudent: (state, {payload}) => {
+            state.displayStudent = payload
         },
         setCountStudent: (state, {payload}) => {
             state.countStudent = payload
         },
-        increaseStudentCount: (state, {payload}) => {
-            state.countStudent += payload;
+        increaseStudentCount: (state) => {
+            state.countStudent++;
         },
         addStudent: (state, {payload}) => { 
             state.studentList.push(payload);

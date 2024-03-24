@@ -65,7 +65,6 @@ export const WheelTemplate = () => {
             <hr />
             {visibleItems?.map((item, index) => (
               <div key={index} className="flex justify-center items-center">
-                {/* <p className="text-center py-[5px]">{item.student_id}</p> */}
                 <GenerateNumber n={item.student_id} />
                 {index < visibleItems?.length - 1 && <hr />}
               </div>

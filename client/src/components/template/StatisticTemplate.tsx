@@ -18,7 +18,7 @@ export const StatisticTemplate = () => {
     minLength: 3
   })
 
-  const { studentList, countStudent } = useSelector((state: RootState) => state.manageStudent) 
+  const { countStudent, displayStudent } = useSelector((state: RootState) => state.manageStudent) 
 
   useEffect(() => { 
     const timerId = setTimeout(() => { 
@@ -46,10 +46,10 @@ export const StatisticTemplate = () => {
       const receivedData = JSON.parse(event.data);
       console.log('Received data:', receivedData);
       if(!receivedData?.StudentInfo){
-        dispatch(manageStudentAction.setStudentList(receivedData?.student_list));
+        dispatch(manageStudentAction.setDisplayStudent(receivedData?.student_list));
         dispatch(manageStudentAction.setCountStudent(receivedData?.count));
       } else {
-        dispatch(manageStudentAction.increaseStudentCount(1));
+        dispatch(manageStudentAction.increaseStudentCount());
         dispatch(manageStudentAction.addStudent(receivedData?.StudentInfo))
         setStudentDetail(receivedData?.StudentInfo);
       }
@@ -99,7 +99,7 @@ export const StatisticTemplate = () => {
                     <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.name}</td>
                     <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.student_id}</td>
                 </tr>
-                {studentList?.map((student, index) => (
+                {displayStudent?.map((student, index) => (
                   <tr key={index}>
                     <td style={{ padding: '10px' }}>{student.name}</td>
                     <td style={{ padding: '10px' }}>{student.student_id}</td>

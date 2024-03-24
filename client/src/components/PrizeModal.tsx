@@ -17,9 +17,15 @@ export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
     }
   }, [prize]);
 
-  const handleModalClose = (prizeNumber) => {
+  const handleModalOk = (prizeNumber) => {
     fireworksSoundRef.current.pause(); 
     dispatch(manageStudentAction.setIsShowPrizes(prizeNumber));
+    onClose(); 
+  };
+
+  const handleModalCancel = () => {
+    fireworksSoundRef.current.pause(); 
+    dispatch(manageStudentAction.removeStudentPrize());
     onClose(); 
   };
 
@@ -38,7 +44,8 @@ export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
       title={<div style={modalTitleStyle}><img className='w-[30%]' src={titileImage} alt="Medal" /></div>}
       open={!!prize}
       footer={[
-        <Button className='bg-[#FEB602] font-medium text-white !hover:cursor-pointer px-8' key="ok" onClick={() => { handleModalClose(prizeNumber-1) }}>OK</Button>,
+        <Button className='bg-red-600 font-medium text-white !hover:cursor-pointer px-8' key="ok" onClick={() => { handleModalCancel() }}>AGAIN</Button>,
+        <Button className='bg-[#FEB602] font-medium text-white !hover:cursor-pointer px-8' key="ok" onClick={() => { handleModalOk(prizeNumber-1) }}>OK</Button>,
       ]}
       width={350}
       style={{ height: '400px' }}
