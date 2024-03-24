@@ -88,7 +88,9 @@ func (h *HTTPAPIHandler) HandleCheckInOut(c *gin.Context, connectionManager *Con
 //   - 200: [{"student-id", "surname", "name", "class", "year"}]
 //   - 500: server error
 func (h *HTTPAPIHandler) GetLuckyAttendeeList(c *gin.Context) {
-	luckyAttendanceList, err := h.StudentUsecase.GetLuckyAttendeeList()
+	ctx := c.Request.Context()
+
+	luckyAttendanceList, err := h.StudentUsecase.GetLuckyAttendeeList(ctx)
 	if err != nil {
 		responseServerError(c, pkg.ParseError(err))
 		return

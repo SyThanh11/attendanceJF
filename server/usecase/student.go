@@ -3,6 +3,7 @@ package usecase
 import (
 	"attendanceJF/model"
 	"attendanceJF/repository"
+	"context"
 	"time"
 )
 
@@ -10,7 +11,7 @@ type StudentUsecase interface {
 	GetAttendanceList() ([]*StudentInfo, error)
 	GetCheckOutList() ([]*StudentInfo, error)
 	HandleCheckInOut(student int) (*StudentInfo, error)
-	GetLuckyAttendeeList() ([]*StudentInfo, error)
+	GetLuckyAttendeeList(ctx context.Context) ([]*StudentInfo, error)
 	GetCount() (int, error)
 }
 
@@ -126,31 +127,39 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (*StudentInfo, erro
 	}, nil
 }
 
-func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
+func (u *studentUsecaseImpl) GetLuckyAttendeeList(ctx context.Context) ([]*StudentInfo, error) {
 	luckyAttendeeList := make([]*StudentInfo, 0)
 	var luckyAttendee *model.Student
 	var err error
 
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
 	for i := 0; i < 10; i++ {
-		luckyAttendee, err = u.studentRepository.FindRandom()
-		if err != nil {
-			return nil, err
-		}
-		// fmt.Print(luckyAttendee)
-		if !luckyAttendee.IsLuckyAttendee && !luckyAttendee.IsComittee {
-			luckyAttendee.IsLuckyAttendee = true
-			if err = u.studentRepository.Update(luckyAttendee); err != nil {
+		select {
+		case <-ctx.Done():
+			return luckyAttendeeList, nil
+		default:
+			luckyAttendee, err = u.studentRepository.FindRandom()
+			if err != nil {
 				return nil, err
 			}
 
-			luckyAttendeeList = append(luckyAttendeeList, &StudentInfo{
-				StudentID: luckyAttendee.ID,
-				Name:      luckyAttendee.Name,
-				School:    luckyAttendee.School,
-				Year:      luckyAttendee.Year,
-			})
-		} else {
-			i--
+			if !luckyAttendee.IsLuckyAttendee && !luckyAttendee.IsComittee {
+				luckyAttendee.IsLuckyAttendee = true
+				if err = u.studentRepository.Update(luckyAttendee); err != nil {
+					return nil, err
+				}
+
+				luckyAttendeeList = append(luckyAttendeeList, &StudentInfo{
+					StudentID: luckyAttendee.ID,
+					Name:      luckyAttendee.Name,
+					School:    luckyAttendee.School,
+					Year:      luckyAttendee.Year,
+				})
+			} else {
+				i--
+			}
 		}
 	}
 
