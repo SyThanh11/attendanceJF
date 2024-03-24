@@ -36,7 +36,16 @@ export const manageStudentSlice = createSlice({
             newIsShowPrizes[Number(payload)] = true; 
             state.isShowPrizes = newIsShowPrizes; 
             console.log(state.isShowPrizes);
-        }
+        },
+        setStudentList: (state, {payload}) => {
+            state.studentList = payload
+        },
+        setCountStudent: (state, {payload}) => {
+            state.countStudent = payload
+        },
+        increaseStudentCount: (state, {payload}) => {
+            state.countStudent += payload;
+        },
     },
     extraReducers: (build) => {
         build.addCase(getStudentListThunk.fulfilled, (state, {payload}) => {

@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "store";
 import { attendanceStudentThunk } from "store/manageStudent/thunk";
 import useScanDetection from "use-scan-detection";
+import { manageStudentAction } from "store/manageStudent/slice";
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [barcodeScan, setBarcodeScan] = useState(null);
-  const [studentList, setStudentList] = useState([]);
-  const [countStudent, setCountStudent] = useState(0);
+  const [studentDetail, setStudentDetail] = useState(null)
   const dispatch = useAppDispatch();
 
   useScanDetection({
@@ -18,7 +18,7 @@ export const StatisticTemplate = () => {
     minLength: 3
   })
 
-  const { studentDetail } = useSelector((state: RootState) => state.manageStudent) 
+  const { studentList, countStudent } = useSelector((state: RootState) => state.manageStudent) 
 
   useEffect(() => { 
     const timerId = setTimeout(() => { 
@@ -43,10 +43,15 @@ export const StatisticTemplate = () => {
     };
 
     socket.onmessage = (event) => {
-      const updatedData = JSON.parse(event.data);
-      console.log('Received updated data:', updatedData);
-      setStudentList(updatedData.student_list);
-      setCountStudent(updatedData.count);
+      const receivedData = JSON.parse(event.data);
+      console.log('Received data:', receivedData);
+      if(!receivedData?.StudentInfo){
+        dispatch(manageStudentAction.setStudentList(receivedData?.student_list));
+        dispatch(manageStudentAction.setCountStudent(receivedData?.count));
+      } else {
+        dispatch(manageStudentAction.increaseStudentCount(1));
+        setStudentDetail(receivedData?.StudentInfo);
+      }
     };
 
     socket.onclose = () => {
