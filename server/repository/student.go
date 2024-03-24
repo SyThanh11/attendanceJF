@@ -50,7 +50,7 @@ func (repo *studentRepositoryImpl) FindByID(id int) (*model.Student, error) {
 
 func (repo *studentRepositoryImpl) FindAll() ([]model.Student, error) {
 	var student []model.Student
-	err := repo.db.Find(&student).Error
+	err := repo.db.Order("time_checkin DESC").Find(&student).Error
 	if err != nil {
 		return nil, err
 	}
