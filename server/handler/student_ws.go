@@ -40,6 +40,9 @@ func (h *RealtimeHandler) CheckInRealtimeHandler(c *gin.Context, connectionMange
 		responseServerError(c, pkg.ParseError(err))
 		return
 	}
+	if len(currentList) > 5 {
+		currentList = currentList[:5]
+	}
 
 	currenState := struct {
 		Count       int                    `json:"count"`
