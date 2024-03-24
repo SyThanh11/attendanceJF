@@ -13,7 +13,7 @@ import (
 // Response:
 //   - 200: [{"student-id", "surname", "name", "school", "year"}]
 //   - 500: general failure
-func (h *AttendanceJFHandler) GetAttendanceList(c *gin.Context) {
+func (h *HTTPAPIHandler) GetAttendanceList(c *gin.Context) {
 	attendanceList, err := h.StudentUsecase.GetAttendanceList()
 	if err != nil {
 		responseBadRequestError(c, pkg.ParseError(err))
@@ -30,7 +30,7 @@ func (h *AttendanceJFHandler) GetAttendanceList(c *gin.Context) {
 // Response:
 //   - 200: [{"student-id", "surname", "name", "class", "year"}]
 //   - 500: general failure
-func (h *AttendanceJFHandler) GetCheckOutList(c *gin.Context) {
+func (h *HTTPAPIHandler) GetCheckOutList(c *gin.Context) {
 	checkoutList, err := h.StudentUsecase.GetCheckOutList()
 	if err != nil {
 		responseBadRequestError(c, pkg.ParseError(err))
@@ -55,7 +55,7 @@ type StudentIDReq struct {
 //   - 400 "binding failure": no id parameter found in URL
 //   - 400 "invalid data": id provided is wrong syntax
 //   - 500: server error
-func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
+func (h *HTTPAPIHandler) HandleCheckInOut(c *gin.Context, connectionManager *ConnectionManager) {
 	var req StudentIDReq
 
 	err := c.ShouldBind(&req)
@@ -76,6 +76,8 @@ func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 	}
 
 	responseSuccess(c, student)
+
+	connectionManager.AddMessage(student) 
 }
 
 // GetLuckyAttendeeList provide list of attendees to play spinner lottery
@@ -85,7 +87,7 @@ func (h *AttendanceJFHandler) HandleCheckInOut(c *gin.Context) {
 // Response:
 //   - 200: [{"student-id", "surname", "name", "class", "year"}]
 //   - 500: server error
-func (h *AttendanceJFHandler) GetLuckyAttendeeList(c *gin.Context) {
+func (h *HTTPAPIHandler) GetLuckyAttendeeList(c *gin.Context) {
 	luckyAttendanceList, err := h.StudentUsecase.GetLuckyAttendeeList()
 	if err != nil {
 		responseServerError(c, pkg.ParseError(err))

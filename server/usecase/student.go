@@ -11,6 +11,7 @@ type StudentUsecase interface {
 	GetCheckOutList() ([]*StudentInfo, error)
 	HandleCheckInOut(student int) (*StudentInfo, error)
 	GetLuckyAttendeeList() ([]*StudentInfo, error)
+	GetCount() (int, error)
 }
 
 type studentUsecaseImpl struct {
@@ -121,8 +122,7 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (*StudentInfo, erro
 
 	return &StudentInfo{
 		StudentID: student.ID,
-		Name: student.Name,
-
+		Name:      student.Name,
 	}, nil
 }
 
@@ -155,4 +155,13 @@ func (u *studentUsecaseImpl) GetLuckyAttendeeList() ([]*StudentInfo, error) {
 	}
 
 	return luckyAttendeeList, nil
+}
+
+func (u *studentUsecaseImpl) GetCount() (int, error) {
+	count, err := u.studentRepository.Count()
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }

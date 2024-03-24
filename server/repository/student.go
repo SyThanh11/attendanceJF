@@ -13,6 +13,7 @@ type StudentRepository interface {
 	FindByID(id int) (*model.Student, error)
 	FindAll() ([]model.Student, error)
 	FindRandom() (*model.Student, error)
+	Count() (int, error)
 }
 
 type studentRepositoryImpl struct {
@@ -59,9 +60,18 @@ func (repo *studentRepositoryImpl) FindAll() ([]model.Student, error) {
 
 func (repo *studentRepositoryImpl) FindRandom() (*model.Student, error) {
 	var student model.Student
-	err := repo.db.Order("RANDOM()").First(&student).Error
+	err := repo.db.Where("is_checkin = ?", true).Order("RANDOM()").First(&student).Error
 	if err != nil {
 		return nil, err
 	}
 	return &student, nil
+}
+
+func (repo *studentRepositoryImpl) Count() (int, error) {
+	var count int64
+	if err := repo.db.Model(&model.Student{}).Where("is_checkin = ?", true).Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }

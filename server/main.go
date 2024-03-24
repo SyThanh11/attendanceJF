@@ -28,26 +28,34 @@ func main() {
 	studentRepository := repository.NewStudentRepository(db)
 
 	studentUsecase := usecase.NewStudentUsecase(studentRepository)
-
+	
 	attendanceJFHandler := handler.NewAttendanceJFHandler(studentUsecase)
+	
+	connectionManager := handler.NewConnectionManager()
+	go connectionManager.Start()
 
 	router := gin.Default()
 
 	// Configure CORS middleware
 	domain := os.Getenv("DOMAIN")
-    router.Use(cors.New(cors.Config{
-        AllowOrigins: []string{domain}, // Allow requests from localhost:3000
-        AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
-        AllowHeaders: []string{"Origin", "Content-Type"},
-    }))
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{domain}, // Allow requests from localhost:3000
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders: []string{"Origin", "Content-Type"},
+	}))
 
 	api := router.Group("/api")
 	{
 		students := api.Group("/students")
-		students.GET("/get-attendance-list", attendanceJFHandler.GetAttendanceList)
-		students.GET("/get-checkout-list", attendanceJFHandler.GetCheckOutList)
-		students.PUT("/checkin-out", attendanceJFHandler.HandleCheckInOut)
-		students.GET("/get-lucky-list", attendanceJFHandler.GetLuckyAttendeeList)
+		students.GET("/get-attendance-list", attendanceJFHandler.HTTPAPIHandler.GetAttendanceList)
+		students.GET("/get-checkout-list", attendanceJFHandler.HTTPAPIHandler.GetCheckOutList)
+		students.PUT("/checkin-out", func(c *gin.Context) {
+			attendanceJFHandler.HTTPAPIHandler.HandleCheckInOut(c, connectionManager)
+		})
+		students.GET("/ws", func(c *gin.Context) {
+			attendanceJFHandler.RealtimeHandler.CheckInRealtimeHandler(c, connectionManager)
+		})
+		students.GET("/get-lucky-list", attendanceJFHandler.HTTPAPIHandler.GetLuckyAttendeeList)
 	}
 
 	router.Run(":8080")
