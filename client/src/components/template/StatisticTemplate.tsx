@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 import '../style.scss';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "store";
-import { attendanceStudentThunk, getStudentListThunk } from "store/manageStudent/thunk";
+import { attendanceStudentThunk } from "store/manageStudent/thunk";
 import useScanDetection from "use-scan-detection";
-// import io from 'socket.io-client';
-
-// const socket = io("http://localhost:8080");
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [barcodeScan, setBarcodeScan] = useState(null);
+  const [studentList, setStudentList] = useState([]);
+  const [countStudent, setCountStudent] = useState(0);
   const dispatch = useAppDispatch();
 
   useScanDetection({
@@ -19,7 +18,7 @@ export const StatisticTemplate = () => {
     minLength: 3
   })
 
-  const { studentList, countStudent, studentDetail } = useSelector((state: RootState) => state.manageStudent) 
+  const { studentDetail } = useSelector((state: RootState) => state.manageStudent) 
 
   useEffect(() => { 
     const timerId = setTimeout(() => { 
@@ -29,32 +28,35 @@ export const StatisticTemplate = () => {
   }, [currentTime])
 
   useEffect(() => {
-    dispatch(getStudentListThunk())
-  }, [dispatch])
-
-  useEffect(() => {
     if (barcodeScan !== null) { 
       dispatch(attendanceStudentThunk({
         id: Number(barcodeScan)
-      })).then(() => {
-        dispatch(getStudentListThunk());
-        // Khi checkin thành công
-        // socket.emit('checkin-notification');
-      });
+      }))
     }
   }, [barcodeScan, dispatch]);
 
-  // Lắng nghe sự kiện từ server
-  // updatedStudentData = {
-    //   attendanceList: [],
-    //   total: number,
-    // }
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:8080/api/students/ws");
 
-  // useEffect(() => {
-  //   socket.on('attendance-update', (updatedStudentData) => {
-  //     console.log('Received attendance update:', updatedStudentData);
-  //   });
-  // }, []);
+    socket.onopen = () => {
+        console.log('Connected to WebSocket server');
+    };
+
+    socket.onmessage = (event) => {
+      const updatedData = JSON.parse(event.data);
+      console.log('Received updated data:', updatedData);
+      setStudentList(updatedData.student_list);
+      setCountStudent(updatedData.count);
+    };
+
+    socket.onclose = () => {
+        console.log('Disconnected from WebSocket server');
+    };
+
+    return () => {
+        socket.close();
+    };
+  }, [dispatch]);
 
   return (
     <div className="container StatisticTemplate h-[60vh] overflow-hidden z-0">
@@ -91,7 +93,7 @@ export const StatisticTemplate = () => {
                     <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.name}</td>
                     <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.student_id}</td>
                 </tr>
-                {studentList.slice(1,6).map((student, index) => (
+                {studentList?.map((student, index) => (
                   <tr key={index}>
                     <td style={{ padding: '10px' }}>{student.name}</td>
                     <td style={{ padding: '10px' }}>{student.student_id}</td>
