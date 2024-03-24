@@ -6,6 +6,7 @@ import { RootState, useAppDispatch } from "store";
 import { attendanceStudentThunk } from "store/manageStudent/thunk";
 import useScanDetection from "use-scan-detection";
 import { manageStudentAction } from "store/manageStudent/slice";
+import { toast } from "react-toastify";
 
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -49,9 +50,17 @@ export const StatisticTemplate = () => {
         dispatch(manageStudentAction.setDisplayStudent(receivedData?.student_list));
         dispatch(manageStudentAction.setCountStudent(receivedData?.count));
       } else {
-        dispatch(manageStudentAction.increaseStudentCount());
-        dispatch(manageStudentAction.addStudent(receivedData?.StudentInfo))
-        setStudentDetail(receivedData?.StudentInfo);
+        if(receivedData?.StudentInfo?.is_checkout != true){
+          dispatch(manageStudentAction.increaseStudentCount());
+          setStudentDetail(receivedData?.StudentInfo);
+          dispatch(manageStudentAction.addStudentDisplay(receivedData?.StudentInfo))
+        } else {
+          if(receivedData?.StudentInfo?.is_checkin === true){
+            toast.error("Bạn đã điểm danh rồi!");
+          } else {
+            toast.error("Bạn vui lòng đăng ký!");
+          }
+        }
       }
     };
 
@@ -95,15 +104,17 @@ export const StatisticTemplate = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className={studentDetail == null ? 'hidden' : 'table-row'}>
-                    <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.name}</td>
-                    <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{studentDetail?.student_id}</td>
-                </tr>
-                {displayStudent?.map((student, index) => (
-                  <tr key={index}>
-                    <td style={{ padding: '10px' }}>{student.name}</td>
-                    <td style={{ padding: '10px' }}>{student.student_id}</td>
-                  </tr>
+                {displayStudent?.length > 0 && (
+                    <tr>
+                        <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{displayStudent[0]?.name}</td>
+                        <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{displayStudent[0]?.student_id}</td>
+                    </tr>
+                )}
+                {displayStudent?.slice(1).map((student, index) => (
+                    <tr key={index + 1}>
+                        <td style={{ padding: '10px' }}>{student?.name}</td>
+                        <td style={{ padding: '10px' }}>{student?.student_id}</td>
+                    </tr>
                 ))}
               </tbody>
             </table>

@@ -51,8 +51,13 @@ export const manageStudentSlice = createSlice({
         increaseStudentCount: (state) => {
             state.countStudent++;
         },
-        addStudent: (state, {payload}) => { 
-            state.studentList.push(payload);
+        addStudentDisplay: (state, {payload}) => { 
+            if(state.displayStudent.length < 5){
+                state.displayStudent.unshift(payload);
+            } else {
+                state.displayStudent.unshift(payload);
+                state.displayStudent.pop();
+            }
         },
     },
     extraReducers: (build) => {
