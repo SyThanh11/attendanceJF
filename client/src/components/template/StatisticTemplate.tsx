@@ -50,6 +50,7 @@ export const StatisticTemplate = () => {
         dispatch(manageStudentAction.setCountStudent(receivedData?.count));
       } else {
         dispatch(manageStudentAction.increaseStudentCount(1));
+        dispatch(manageStudentAction.addStudent(receivedData?.StudentInfo))
         setStudentDetail(receivedData?.StudentInfo);
       }
     };
