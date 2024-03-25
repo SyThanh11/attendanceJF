@@ -11,7 +11,6 @@ import { toast } from "react-toastify";
 export const StatisticTemplate = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [barcodeScan, setBarcodeScan] = useState(null);
-  const [studentDetail, setStudentDetail] = useState(null)
   const dispatch = useAppDispatch();
 
   useScanDetection({
@@ -52,7 +51,6 @@ export const StatisticTemplate = () => {
       } else {
         if(receivedData?.StudentInfo?.is_checkout != true){
           dispatch(manageStudentAction.increaseStudentCount());
-          setStudentDetail(receivedData?.StudentInfo);
           dispatch(manageStudentAction.addStudentDisplay(receivedData?.StudentInfo))
         } else {
           if(receivedData?.StudentInfo?.is_checkin === true){
