@@ -66,7 +66,7 @@ export const manageStudentSlice = createSlice({
             state.countStudent = payload.data.length;
         }).addCase(attendanceStudentThunk.fulfilled, (state, {payload}) => {
             state.studentDetail = payload.data
-            if(!payload.data.is_checkin){
+            if(payload.data.is_checkin && !payload.data.is_checkin){
                 toast.success('Thành công');
             }
         }).addCase(attendanceStudentThunk.rejected, () => {
