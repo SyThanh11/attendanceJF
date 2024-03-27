@@ -58,8 +58,6 @@ export const WheelTemplate = () => {
 
   useEffect(() => { 
     dispatch(manageStudentAction.getStudentPrize());
-    console.log('Hello');
-    
   }, [])
 
   return (

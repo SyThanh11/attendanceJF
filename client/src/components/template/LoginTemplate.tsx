@@ -5,7 +5,8 @@ import { LoginSchema, LoginSchemaType } from "schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { KeyOutlined, UserOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
-import { PATH } from "constant"
+import { LoginType, PATH } from "constant"
+import { toast } from "react-toastify"
 
 export const LoginTemplate = () => {
     const navigate = useNavigate();
@@ -15,12 +16,20 @@ export const LoginTemplate = () => {
         mode: "onChange"
     })
 
-  const onSubmit: SubmitHandler<LoginSchemaType> = async (value) => { 
+  const onSubmit: SubmitHandler<LoginSchemaType> = async (value: LoginType) => { 
     try {
-        navigate(PATH.statistic);
-        localStorage.setItem("KEY", JSON.stringify(value));
+        if(value.username == 'admin'){
+            if(value.password == '123456'){
+                navigate(PATH.statistic);
+                localStorage.setItem("KEY", JSON.stringify(value));
+            } else {
+                toast.error('Password is incorrect');    
+            }
+        } else {
+            toast.error('Username is incorrect');
+        }
     } catch (error) {
-        
+        console.log(error);
     }
    }
 
