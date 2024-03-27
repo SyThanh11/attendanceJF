@@ -1,4 +1,4 @@
-import { GiftOutlined, UserAddOutlined, UserDeleteOutlined } from "@ant-design/icons";
+import { CloudDownloadOutlined, GiftOutlined, UserAddOutlined, UserDeleteOutlined } from "@ant-design/icons";
 import { PATH } from "constant";
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +6,7 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='Navbar flex justify-center relative z-[100] h-[180px] -mt-[30px]'>
+    <div className='Navbar flex justify-center relative z-[100] h-[210px] -mt-[30px]'>
       <div className="navbar-content bg-gray-100 w-[50%] h-[100%] flex flex-col items-center " style={{
         borderRadius: '20px',
         boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px' 
@@ -24,6 +24,10 @@ export const Navbar = () => {
           <li onClick={() => { navigate(PATH.wheel) }} className="py-2 pl-2 flex items-center hover:bg-gray-200 w-full transition-all duration-200 hover:cursor-pointer overflow-hidden">
             <GiftOutlined className="font-semibold text-[16px] mr-2"/>
             <p className="font-semibold hover:text-black">Wheel</p>
+          </li>
+          <li onClick={() => { navigate(PATH.export) }} className="py-2 pl-2 flex items-center hover:bg-gray-200 w-full transition-all duration-200 hover:cursor-pointer overflow-hidden">
+            <CloudDownloadOutlined className="font-semibold text-[16px] mr-2"/>
+            <p className="font-semibold hover:text-black">Export</p>
           </li>
         </ul>
       </div>

@@ -1,12 +1,14 @@
 import { Button, Col, Row } from "antd"
 import { Spin } from "components";
-import { Student } from "constant";
+import { PATH, Student } from "constant";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "store";
 import { manageStudentAction } from "store/manageStudent/slice";
 import { getLuckyListThunk } from "store/manageStudent/thunk";
 import { useSpring, animated } from 'react-spring';
+import '../style.scss'
+import { useNavigate } from "react-router-dom";
 
 export const WheelTemplate = () => {
   const { luckyList, studentPrize, isShowPrizes } = useSelector((state: RootState) => ({
@@ -17,30 +19,29 @@ export const WheelTemplate = () => {
   const [visibleItems, setVisibleItems] = useState([]);
   const [showDataWheel, setShowDataWheel] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const GenerateNumber = ({n}) => { 
     const { number } = useSpring({
       from: { number: 0 },
       number: n,
-      config: { duration: 2000, delay: 1000 },
+      config: { duration: 1000, delay: 1000 },
     });
     return <animated.p className="text-center py-[5px]">{number.to((n) => n.toFixed(0))}</animated.p>
   }
 
   useEffect(() => {
     const timeoutIds = [];
-    let itemsRendered = 0;
     luckyList.forEach((item, index) => {
       const timeoutId = setTimeout(() => {
         setVisibleItems(prevItems => [...prevItems, item]);
-        itemsRendered++;
-        if (itemsRendered === luckyList.length) {
+        if (index === luckyList.length - 1) {
           setTimeout(() => { 
             setShowDataWheel(true);
             setVisibleItems([]);
-          }, 4000)
+          }, 4000);
         }
-      }, 0 * (index + 1));
+      }, 1000 * (index + 1));
       timeoutIds.push(timeoutId);
     });
   
@@ -48,6 +49,18 @@ export const WheelTemplate = () => {
       timeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
     };
   }, [luckyList]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('KEY')) {
+      navigate(PATH.login);
+    }
+  }, [navigate]);
+
+  useEffect(() => { 
+    dispatch(manageStudentAction.getStudentPrize());
+    console.log('Hello');
+    
+  }, [])
 
   return (
     <div className="WheelTemplate h-[60vh]">
@@ -64,9 +77,10 @@ export const WheelTemplate = () => {
             }} className="bg-[#FAA377] font-semibold text-center text-[16px] py-2">MSSV</h1>
             <hr />
             {visibleItems?.map((item, index) => (
-              <div key={index} className="flex justify-center items-center">
-                <GenerateNumber n={item.student_id} />
-                {index < visibleItems?.length - 1 && <hr />}
+              <div key={index} className="flex justify-center items-center p-[4px]">
+                {
+                  index === visibleItems.length - 1 ? <GenerateNumber n={item.student_id} /> : item.student_id
+                }
               </div>
             ))}
             <Button onClick={() => { 

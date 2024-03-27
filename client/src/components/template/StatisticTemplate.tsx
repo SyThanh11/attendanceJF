@@ -6,11 +6,15 @@ import { RootState, useAppDispatch } from "store";
 import { attendanceStudentThunk } from "store/manageStudent/thunk";
 import useScanDetection from "use-scan-detection";
 import { manageStudentAction } from "store/manageStudent/slice";
+import { useNavigate } from "react-router-dom";
+import { PATH } from "constant";
 import { toast } from "react-toastify";
 
 export const StatisticTemplate = () => {
+  const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [barcodeScan, setBarcodeScan] = useState(null);
+  const [studentDetail, setStudentDetail] = useState(null);
   const dispatch = useAppDispatch();
 
   useScanDetection({
@@ -31,7 +35,13 @@ export const StatisticTemplate = () => {
     if (barcodeScan !== null) { 
       dispatch(attendanceStudentThunk({
         id: Number(barcodeScan)
-      }))
+      })).then(() => { 
+        if(studentDetail?.is_checkout){
+          toast.error('Bạn đã check in rồi!')
+          console.log('Hi');
+          
+        }
+      })
     }
   }, [barcodeScan, dispatch]);
 
@@ -52,13 +62,8 @@ export const StatisticTemplate = () => {
         if(receivedData?.StudentInfo?.is_checkout != true){
           dispatch(manageStudentAction.increaseStudentCount());
           dispatch(manageStudentAction.addStudentDisplay(receivedData?.StudentInfo))
-        } else {
-          if(receivedData?.StudentInfo?.is_checkin === true){
-            toast.error("Bạn đã điểm danh rồi!");
-          } else {
-            toast.error("Bạn vui lòng đăng ký!");
-          }
-        }
+          setStudentDetail(receivedData?.StudentInfo)
+        } 
       }
     };
 
@@ -70,6 +75,12 @@ export const StatisticTemplate = () => {
         socket.close();
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('KEY')) {
+      navigate(PATH.login);
+    }
+  }, [navigate]);
 
   return (
     <div className="container StatisticTemplate h-[60vh] overflow-hidden z-0">
@@ -104,8 +115,8 @@ export const StatisticTemplate = () => {
               <tbody>
                 {displayStudent?.length > 0 && (
                     <tr>
-                        <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{displayStudent[0]?.name}</td>
-                        <td style={{ padding: '10px', textAlign: 'center', fontSize: '20px' }}>{displayStudent[0]?.student_id}</td>
+                        <td className="text-blue-600" style={{ padding: '10px', textAlign: 'center', fontSize: '24px', fontWeight: 600 }}>{displayStudent[0]?.name}</td>
+                        <td className="text-blue-600" style={{ padding: '10px', textAlign: 'center', fontSize: '24px', fontWeight: 600 }}>{displayStudent[0]?.student_id}</td>
                     </tr>
                 )}
                 {displayStudent?.slice(1).map((student, index) => (

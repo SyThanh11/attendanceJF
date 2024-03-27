@@ -5,6 +5,7 @@ import { useAppDispatch } from 'store';
 import { manageStudentAction } from 'store/manageStudent/slice';
 import { Fireworks } from '@fireworks-js/react'
 import './style.scss'
+import classNames from 'classnames';
 
 export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
   const fireworksSoundRef = useRef(null);
@@ -13,13 +14,13 @@ export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
   useEffect(() => {
     if (prize) {
       fireworksSoundRef.current.play(); 
-      console.log(prize);
     }
   }, [prize]);
 
   const handleModalOk = (prizeNumber) => {
     fireworksSoundRef.current.pause(); 
     dispatch(manageStudentAction.setIsShowPrizes(prizeNumber));
+    localStorage.setItem(`PRIZE_${prizeNumber+1}`, JSON.stringify(student))
     onClose(); 
   };
 
@@ -44,8 +45,11 @@ export const PrizeModal = ({ prize, student, onClose, prizeNumber }) => {
       title={<div style={modalTitleStyle}><img className='w-[30%]' src={titileImage} alt="Medal" /></div>}
       open={!!prize}
       footer={[
-        <Button className='bg-red-600 font-medium text-white !hover:cursor-pointer px-8' key="ok" onClick={() => { handleModalCancel() }}>AGAIN</Button>,
-        <Button className='bg-[#FEB602] font-medium text-white !hover:cursor-pointer px-8' key="ok" onClick={() => { handleModalOk(prizeNumber-1) }}>OK</Button>,
+        <Button className='bg-red-600 font-medium text-white !hover:cursor-pointer px-8' key="cancel" onClick={() => { handleModalCancel() }}>AGAIN</Button>,
+        <Button className={classNames({
+          'bg-[#FEB602] font-medium text-white !hover:cursor-pointer px-8': true,
+          'hidden': !student
+        })} key="ok" onClick={() => { handleModalOk(prizeNumber-1) }}>OK</Button>,
       ]}
       width={350}
       style={{ height: '400px' }}

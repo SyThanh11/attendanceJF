@@ -1,11 +1,20 @@
 $button-color-1: #F7C8E0;
 $button-color-2: #3C90CC;
+$button-color-3: #FF6C22;
 
 @mixin buttonEffect($color, $paddingInline, $colorText) {
     padding-inline: $paddingInline;
     &:hover{
         background-color: $color!important;
         color: $colorText!important;
+        border-color: $color!important;
+    }
+}
+
+@mixin buttonEffectSecond($color){
+    transition: 0.3s;
+    &:hover{
+        color: $color!important;
         border-color: $color!important;
     }
 }
@@ -48,6 +57,7 @@ $button-color-2: #3C90CC;
             // border: 1px solid black;
         }
     }
+
 }
 
 .AttendanceTemplate {
@@ -55,6 +65,9 @@ $button-color-2: #3C90CC;
         padding-block: 6px;
         font-weight: 500;
         padding-left: 12px
+    }
+    Button.button {
+        @include buttonEffectSecond($button-color-3)
     }
 }
 .Modal {
@@ -64,5 +77,30 @@ $button-color-2: #3C90CC;
         align-items: center!important;
         text-align: center!important;
     }
- }
+}
 
+.WheelTemplate {
+    Button {
+        @include buttonEffectSecond($button-color-3)
+    }
+}
+
+.ExportListTemplate {
+    Button {
+        @include buttonEffectSecond($button-color-3)
+    }
+    Button.export {
+        @include buttonEffectSecond(#38aabc)
+    }
+}
+
+.LoginTemplate {
+    input {
+        border: 2px solid black!important;
+        margin-left: 6px;
+        border-radius: 15px;
+    }
+    Button {
+        @include buttonEffectSecond($button-color-3)
+    }
+}

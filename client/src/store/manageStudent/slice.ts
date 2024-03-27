@@ -19,7 +19,7 @@ const initialState: manageStudentState = {
     countStudent: 0,
     luckyList: [],
     studentPrize: [],
-    isShowPrizes: [false, false, false],
+    isShowPrizes: [false, false, false, false],
     displayStudent: []
 }
 
@@ -59,6 +59,16 @@ export const manageStudentSlice = createSlice({
                 state.displayStudent.pop();
             }
         },
+        getStudentPrize: (state) => { 
+            const prizeKeys = ['PRIZE_3', 'PRIZE_2', 'PRIZE_1'];
+            prizeKeys.forEach((key, index) => {
+                const prize = localStorage.getItem(key);
+                if (prize) {
+                    state.studentPrize.push(JSON.parse(prize));
+                    state.isShowPrizes[2-index] = true;
+                }
+            });
+        }
     },
     extraReducers: (build) => {
         build.addCase(getStudentListThunk.fulfilled, (state, {payload}) => {
@@ -66,11 +76,11 @@ export const manageStudentSlice = createSlice({
             state.countStudent = payload.data.length;
         }).addCase(attendanceStudentThunk.fulfilled, (state, {payload}) => {
             state.studentDetail = payload.data
-            if(payload.data.is_checkin && !payload.data.is_checkin){
-                toast.success('Thành công');
+            if(payload.data.is_checkin && !payload.data.is_checkout){
+                toast.success('Check in thành công');
             }
         }).addCase(attendanceStudentThunk.rejected, () => {
-            toast.error('Bạn đã check out rồi!')
+            toast.error('Scan Error!')
         }).addCase(getLuckyListThunk.fulfilled, (state, {payload}) => { 
             state.luckyList = payload.data
         })

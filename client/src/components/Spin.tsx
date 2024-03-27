@@ -41,7 +41,7 @@ export const Spin = (probs) => {
   const [prize, setPrize] = useState(null);
   const [prizeInfo, setPrizeInfo] = useState(null);
   const luckyList: Student[] = useSelector((state: RootState) => state.manageStudent.luckyList)
-  const wheelData = luckyList.map((student) => ({ option: student.student_id }));
+  const wheelData = luckyList.map((student, index) => ({ option: student.student_id, key: index }));
   const dispatch = useAppDispatch();
 
   const handleSpinClick = () => {
@@ -68,7 +68,7 @@ export const Spin = (probs) => {
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
-        data={probs.showDataWheel ? wheelData : defaultData}
+        data={probs.showDataWheel ? wheelData.map(item => ({ ...item, key: item.option })) : defaultData}
         backgroundColors={backgroundColors}
         textColors={textColors}
         outerBorderWidth={0}
@@ -88,7 +88,7 @@ export const Spin = (probs) => {
             paddingInline: '40px'
         }} className='w-[20%] py-[20px] bg-[#FF6C22] font-medium text-white text-[18px] flex items-center justify-center !hover:cursor-pointer z-10'> SPIN
       </Button>
-      <PrizeModal prize={prize} student={prizeInfo} onClose={handleCloseModal} prizeNumber={probs.prizeNumber}/>
+      <PrizeModal prize={prize} student={prizeInfo} onClose={handleCloseModal} prizeNumber={probs.prizeNumber} key={prizeInfo?.student_id}/>
     </div>
   )
 }

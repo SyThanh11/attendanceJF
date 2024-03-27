@@ -25,7 +25,8 @@
       "pages": ["pages"],
       "routes" : ["routes"],
       "service": ["service"],
-      "store": ["store"]
+      "store": ["store"],
+      "schema": ["schema"]
     },
     "noUnusedLocals": true,
     "noUnusedParameters": true,

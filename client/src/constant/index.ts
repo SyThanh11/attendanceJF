@@ -4,5 +4,7 @@ export * from './type'
 export const PATH = {
     statistic: '/',
     attendance: '/attendance',
-    wheel: '/wheel'
+    wheel: '/wheel',
+    export: '/export',
+    login: '/login'
 }

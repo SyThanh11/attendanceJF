@@ -1,6 +1,6 @@
 import { MainLayout } from "components";
 import { PATH } from "constant";
-import { Attendance, Statistic, Wheel } from "pages";
+import { Attendance, ExportList, Login, Statistic, Wheel } from "pages";
 import { RouteObject } from "react-router-dom";
 
 export const route: RouteObject[] = [
@@ -18,7 +18,15 @@ export const route: RouteObject[] = [
             {
                 path: PATH.wheel,
                 element: <Wheel />
+            },
+            {
+                path: PATH.export,
+                element: <ExportList />
+            },
+            {
+                path: PATH.login,
+                element: <Login />
             }
         ]
-    }
+    },
 ];

@@ -7,3 +7,8 @@ export type Student = {
     is_checkin?: boolean,
     is_checkout?: boolean
 }
+
+export type LoginType = {
+    username?: string,
+    password?: string
+}

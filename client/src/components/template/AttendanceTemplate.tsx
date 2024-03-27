@@ -2,14 +2,19 @@ import { Button, Col, Input, Row } from 'antd';
 import '../style.scss';
 import { SearchOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { Student } from 'constant';
+import { PATH, Student } from 'constant';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from 'store';
 import { attendanceStudentThunk, getStudentListThunk } from 'store/manageStudent/thunk';
+import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ITEMS_PER_PAGE = 6;
 
 export const AttendanceTemplate = () => {
+  const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState('');
   const [displayedStudents, setDisplayedStudents] = useState([]);
@@ -41,6 +46,12 @@ export const AttendanceTemplate = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem('KEY')) {
+      navigate(PATH.login);
+    }
+  }, [navigate]);
 
   return (
     <div className="AttendanceTemplate h-[100vh] bg-[#F6F3F1]">
@@ -82,7 +93,9 @@ export const AttendanceTemplate = () => {
           <div className='button flex w-full justify-center'>
             <Button style={{
               borderRadius: '10px'
-            }} className='w-[15%] mt-4 py-[20px] bg-[#86A1E7] font-bold text-white text-[14px] flex items-center justify-center'>CHECK-OUT</Button>
+            }} className={classNames({
+              'w-[15%] mt-4 py-[20px] bg-[#86A1E7] font-bold text-white text-[14px] flex items-center justify-center': true,
+            })}>CHECK-OUT</Button>
           </div>  
           <div className='bottom bg-white w-[55%] mt-8' style={{
             borderRadius: '15px',
@@ -117,11 +130,12 @@ export const AttendanceTemplate = () => {
                     <h3 className='text-left text-[16px] text-gray-500'>{student.student_id}</h3>
                   </div>
                   <div className='right flex items-center'>
-                    <Button onClick={() => { 
+                    <Button disabled={student?.is_checkout} onClick={() => { 
                       dispatch(attendanceStudentThunk({
                        id: student.student_id 
                       })).then(() => { 
                         dispatch(getStudentListThunk())
+                        toast.success('Check out thành công')
                       })
                     }} style={{
                     borderRadius: '10px',
@@ -134,10 +148,10 @@ export const AttendanceTemplate = () => {
             }
           </div>
           <div className="pagination flex items-center justify-end mr-6 mt-4">
-            <Button className='z-30 mr-4 bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center !hover:cursor-pointer' onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+            <Button className='z-30 button mr-4 bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center' onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
               Previous
             </Button>
-            <Button className='z-30 bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center !hover:cursor-pointer' onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages - 1}>
+            <Button className='z-30 button bg-[#FF6C22] font-medium text-white text-[16px] flex items-center justify-center !hover:cursor-pointer' onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages }>
               Next
             </Button>
           </div>
