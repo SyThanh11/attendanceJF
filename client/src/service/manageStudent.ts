@@ -7,7 +7,7 @@ const api = apiInstance({
 export const manageStudentService = {
     getListStudent: () => api.get('/get-attendance-list'),
     attendanceStudent: (payload: {
-        id: number
+        id: string
     }) => api.put('/checkin-out', payload),
     getLuckyList: () => api.get('/get-lucky-list')
 }

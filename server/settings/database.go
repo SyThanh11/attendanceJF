@@ -4,7 +4,6 @@ import (
 	"attendanceJF/model"
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/tealeg/xlsx"
 	"gorm.io/driver/postgres"
@@ -61,9 +60,9 @@ func initData() {
 
 	for _, row := range sheet.Rows[1:] {
 
-		studentIDString := row.Cells[0].String()
-		fmt.Print(studentIDString)
-		studentID, err := strconv.Atoi(studentIDString)
+		studentID := row.Cells[1].String()
+		// fmt.Print(studentIDString)
+		// studentID, err := strconv.Atoi(studentIDString)
 		if err != nil {
 			fmt.Println("Error converting student ID:", err) // Add logging
 			panic(err)
@@ -71,14 +70,37 @@ func initData() {
 
 		student := model.Student{
 			ID:              studentID,
-			Name:            row.Cells[1].String(),
+			Name:            row.Cells[0].String(),
 			School:          row.Cells[2].String(),
-			Year:            model.SchoolYear(row.Cells[3].String()),
-			IsComittee:      row.Cells[4].String() == "Ban tổ chức",
+			// IsComittee:      row.Cells[4].String() == "Ban tổ chức",
 			IsCheckin:       false,
 			IsCheckout:      false,
 			IsLuckyAttendee: false,
 		}
+
+		if err = db.Save(&student).Error; err != nil {
+			continue
+		}
+	}
+
+	blackListPath := os.Getenv("BLACK_LIST_PATH")
+	blackListFile, err := xlsx.OpenFile(blackListPath)
+	if err != nil {
+		panic(err)
+	}
+
+	sheet = blackListFile.Sheets[0]
+	for _, row := range sheet.Rows[1:] {
+
+		studentID := row.Cells[0].String()
+		// fmt.Print(studentIDString)
+		// studentID, err := strconv.Atoi(studentIDString)
+
+		var student model.Student
+		if err = db.First(&student, studentID).Error; err != nil {
+			continue	
+		}
+		student.IsComittee = true
 
 		if err = db.Save(&student).Error; err != nil {
 			continue

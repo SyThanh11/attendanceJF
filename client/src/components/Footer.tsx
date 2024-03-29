@@ -15,7 +15,7 @@ export const Footer = () => {
               width: "28%",
               zIndex: 0
         }}/>
-        <img src="/image/wave.png" alt="wave" style={{
+        <img src="/image/wave.webp" alt="wave" style={{
             position: "absolute",
             bottom: -90,
             width: "100%",

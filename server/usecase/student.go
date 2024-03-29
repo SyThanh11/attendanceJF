@@ -4,13 +4,16 @@ import (
 	"attendanceJF/model"
 	"attendanceJF/repository"
 	"context"
+	"errors"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type StudentUsecase interface {
 	GetAttendanceList() ([]*StudentInfo, error)
 	GetCheckOutList() ([]*StudentInfo, error)
-	HandleCheckInOut(student int) (*StudentInfo, error)
+	HandleCheckInOut(id string) (*StudentInfo, error)
 	GetLuckyAttendeeList(ctx context.Context) ([]*StudentInfo, error)
 	GetCount() (int, error)
 }
@@ -28,13 +31,11 @@ func NewStudentUsecase(
 }
 
 type StudentInfo struct {
-	StudentID  int              `json:"student_id"`
-	Name       string           `json:"name"`
-	Surname    string           `json:"surname"`
-	School     string           `json:"school"`
-	Year       model.SchoolYear `json:"year"`
-	IsCheckin  bool             `json:"is_checkin"`
-	IsCheckout bool             `json:"is_checkout"`
+	StudentID  string `json:"student_id"`
+	Name       string `json:"name"`
+	School     string `json:"school"`
+	IsCheckin  bool   `json:"is_checkin"`
+	IsCheckout bool   `json:"is_checkout"`
 }
 
 func (u *studentUsecaseImpl) GetAttendanceList() ([]*StudentInfo, error) {
@@ -50,7 +51,6 @@ func (u *studentUsecaseImpl) GetAttendanceList() ([]*StudentInfo, error) {
 				StudentID:  student.ID,
 				Name:       student.Name,
 				School:     student.School,
-				Year:       student.Year,
 				IsCheckin:  student.IsCheckin,
 				IsCheckout: student.IsCheckout,
 			})
@@ -73,7 +73,6 @@ func (u *studentUsecaseImpl) GetCheckOutList() ([]*StudentInfo, error) {
 				StudentID:  student.ID,
 				Name:       student.Name,
 				School:     student.School,
-				Year:       student.Year,
 				IsCheckin:  student.IsCheckin,
 				IsCheckout: student.IsCheckout,
 			})
@@ -90,10 +89,21 @@ func (u *studentUsecaseImpl) GetCheckOutList() ([]*StudentInfo, error) {
 // 	CheckOut Status = "checkout"
 // )
 
-func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (*StudentInfo, error) {
+func (u *studentUsecaseImpl) HandleCheckInOut(id string) (*StudentInfo, error) {
 	// var status Status
 
-	student, err := u.studentRepository.FindByID(studentID)
+	student, err := u.studentRepository.FindByID(id)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		u.studentRepository.Create(&model.Student{
+			ID:              id,
+			Name:            "Sinh viên chưa đăng ký",
+			School:          "Sinh viên chưa đăng ký",
+			IsCheckin:       true,
+			IsCheckout:      false,
+			IsLuckyAttendee: true,
+		})
+		return nil, nil
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +141,6 @@ func (u *studentUsecaseImpl) HandleCheckInOut(studentID int) (*StudentInfo, erro
 		StudentID:  student.ID,
 		Name:       student.Name,
 		School:     student.School,
-		Year:       student.Year,
 		IsCheckin:  student.IsCheckin,
 		IsCheckout: student.IsCheckout,
 	}, nil
@@ -165,7 +174,6 @@ func (u *studentUsecaseImpl) GetLuckyAttendeeList(ctx context.Context) ([]*Stude
 					StudentID: luckyAttendee.ID,
 					Name:      luckyAttendee.Name,
 					School:    luckyAttendee.School,
-					Year:      luckyAttendee.Year,
 				})
 			} else {
 				i--

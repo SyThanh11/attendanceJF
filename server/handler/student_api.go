@@ -41,7 +41,7 @@ func (h *HTTPAPIHandler) GetCheckOutList(c *gin.Context) {
 }
 
 type StudentIDReq struct {
-	ID int `json:"id"`
+	ID string `json:"id"`
 }
 
 // HandleCheckInOut is used to handle for student checkin or checkout
