@@ -57,7 +57,11 @@ $button-color-3: #FF6C22;
             // border: 1px solid black;
         }
     }
-
+    input {
+        border: 2px solid black!important;
+        margin-left: 6px;
+        border-radius: 15px;
+    }
 }
 
 .AttendanceTemplate {
