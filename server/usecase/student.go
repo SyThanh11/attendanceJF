@@ -94,15 +94,22 @@ func (u *studentUsecaseImpl) HandleCheckInOut(id string) (*StudentInfo, error) {
 
 	student, err := u.studentRepository.FindByID(id)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		u.studentRepository.Create(&model.Student{
+		newStudent := &model.Student{
 			ID:              id,
 			Name:            "Sinh viên chưa đăng ký",
 			School:          "Sinh viên chưa đăng ký",
 			IsCheckin:       true,
 			IsCheckout:      false,
 			IsLuckyAttendee: true,
-		})
-		return nil, nil
+		}
+		u.studentRepository.Create(newStudent)
+		return &StudentInfo{
+			StudentID: newStudent.ID,
+			Name: newStudent.Name,
+			School: newStudent.School,
+			IsCheckin: newStudent.IsCheckin,
+			IsCheckout: newStudent.IsCheckout,
+		}, nil
 	}
 	if err != nil {
 		return nil, err
