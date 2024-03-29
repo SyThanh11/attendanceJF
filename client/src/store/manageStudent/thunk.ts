@@ -12,7 +12,7 @@ export const getStudentListThunk = createAsyncThunk('manageStudent/getStudentLis
 });
 
 export const attendanceStudentThunk = createAsyncThunk('manageStudent/attendanceStudentThunk', async (payload: {
-    id: number
+    id: string
 }, {rejectWithValue}) => {
     try {
         const data = await manageStudentService.attendanceStudent(payload);
