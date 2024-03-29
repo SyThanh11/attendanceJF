@@ -34,7 +34,7 @@ export const StatisticTemplate = () => {
   useEffect(() => {
     if (barcodeScan !== null) { 
       dispatch(attendanceStudentThunk({
-        id: Number(barcodeScan)
+        id: String(barcodeScan)
       })).then(() => { 
         if(studentDetail?.is_checkout){
           toast.error('Bạn đã check in rồi!')
